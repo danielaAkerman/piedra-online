@@ -9,7 +9,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-console.log(process.env)
+// console.log(process.env)
 
 app.get("/env", (req, res) => {
   res.json({
@@ -29,7 +29,7 @@ app.get("/hola", (req, res) => {
   });
 });
 
-app.use(express.static("dist"));
+// app.use(express.static("../dist"));
 
 app.get("*", (req, res) => {
   res.sendFile(__dirname + "/dist/index.html");

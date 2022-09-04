@@ -1,9 +1,16 @@
-function main (){
-    const buttonEl = document.querySelector(".button")
-    const rootEl = document.querySelector(".root")
+import { initRouter } from "./router";
+import { state } from "./state";
+import "./components/button"
+import "./components/input"
+import "./components/results"
+import "./components/countdown"
 
-    buttonEl.addEventListener('click', ()=>{
-        rootEl.innerHTML= "Funcionando"
-    })
-}
-main()
+(function () {
+  if (localStorage["game-state"]) {
+    state.init();
+  }
+  // localStorage.clear()
+
+  const root = document.querySelector(".root") as HTMLElement;
+  initRouter(root);
+})();
