@@ -13,7 +13,9 @@ export function initPageRoomUp(container) {
 
   const button = div.querySelector(".button") as HTMLElement;
 
-  button.addEventListener("click", container.goTo("/instructions"));
+  button.addEventListener("click", () => {
+    container.goTo("/instructions");
+  });
 
   const style = document.createElement("style");
   style.textContent = `

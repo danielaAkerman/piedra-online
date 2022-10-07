@@ -29,12 +29,12 @@ app.get("/hola", (req, res) => {
   });
 });
 
-// app.use(express.static("../dist"));
+app.use(express.static("./dist"));
 
 app.get("*", (req, res) => {
   res.sendFile(__dirname + "/dist/index.html");
 });
 
 app.listen(port, () => {
-  console.log("Corriendo en puerto " + port);
+  console.log("Corriendo en puerto http://localhost:" + port);
 });

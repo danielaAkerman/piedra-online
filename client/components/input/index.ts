@@ -17,7 +17,7 @@ customElements.define(
       div.innerHTML = `
           <span class="span">Para continuar, ingresá tu ${label}:</span>
           <input placeholder=${
-            label[0].toUpperCase() + label.slice(1)
+            label![0].toUpperCase() + label!.slice(1)
           } type=${type} name=${name} class="input">
       `;
 

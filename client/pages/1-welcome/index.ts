@@ -1,10 +1,9 @@
 import { state } from "../../state";
 
-export function initPageWelcome(container) {
+export function initPageWelcome(params) {
   const div = document.createElement("div");
   div.innerHTML = `
   <h1 class="titulo">PIEDRA,<br>PAPEL O<br>TIJERAS</h1>
-  <br>
   <input-comp label="nombre" type="text" name="nombre" class="input"></input-comp>
   <br>
   <button-comp class="nuevo-juego">NUEVO JUEGO</button-comp>
@@ -21,7 +20,8 @@ export function initPageWelcome(container) {
       input.shadowRoot!.querySelector("input")!.value[0].toUpperCase() +
       input.shadowRoot!.querySelector("input")!.value.slice(1);
     state.addUserName(userName);
-    container.goTo("/room-up");
+    state.setNewRoom(params)
+    // params.goTo("/room-up");
   });
 
   buttonIngresar.addEventListener("click", () => {
@@ -29,7 +29,7 @@ export function initPageWelcome(container) {
       input.shadowRoot!.querySelector("input")!.value[0].toUpperCase() +
       input.shadowRoot!.querySelector("input")!.value.slice(1);
     state.addUserName(userName);
-    container.goTo("/room-in");
+    params.goTo("/room-in");
   });
 
   const style = document.createElement("style");

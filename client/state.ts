@@ -1,7 +1,15 @@
+const url = "https://piedra-online.herokuapp.com";
+
 export const state = {
   data: {
     userName: "",
+    userId: "",
+    roomId: "",
+    longRoomId: "",
     resultadoParcial: "",
+    oponentUserName: "",
+    myStatus: "",
+    oponentStatus: "",
     currentGame: {
       myPlay: "",
       pcPlay: "",
@@ -24,10 +32,13 @@ export const state = {
 
   setState(newState) {
     this.data = newState;
+    console.log("soy el state: ", newState );
+
     for (const call of this.listeners) {
       call(newState);
     }
     localStorage.setItem("game-state", JSON.stringify(newState));
+    
   },
 
   subscribe(callback: (any) => any) {
@@ -37,11 +48,38 @@ export const state = {
   addUserName(name) {
     const currentState = this.getState();
     currentState.userName = name;
+    state.setState(currentState)
   },
 
   addRoomId(id){
     const currentState = this.getState();
     currentState.roomId = id;
+    state.setState(currentState)
+  },
+
+  setNewRoom(params){
+    const currentState = this.getState();
+    if (currentState.userId) {
+      fetch(url + "/rooms", {
+        method: "post",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({ userId: currentState.userId }),
+      })
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          currentState.roomId = data.id;
+          currentState.rtdbRoomId = data.rtdbRoomId;
+          this.setState(currentState);
+          this.init();
+          params.goTo("/sala-chat");
+        });
+    } else {
+      console.error("No hay user Id");
+    }
   },
 
   move(myPlay) {}
