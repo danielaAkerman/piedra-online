@@ -1,4 +1,4 @@
-const url = "https://piedra-online.herokuapp.com";
+const url = "http://localhost:3000";
 
 export const state = {
   data: {
@@ -45,10 +45,12 @@ export const state = {
     this.listeners.push(callback);
   },
 
-  addUserName(name) {
+  setUserName(name, params) {
     const currentState = this.getState();
     currentState.userName = name;
     state.setState(currentState)
+    // Si existe el userName, trae el ID, 
+    // Si no existe, lo crea.
   },
 
   addRoomId(id){
@@ -75,7 +77,7 @@ export const state = {
           currentState.rtdbRoomId = data.rtdbRoomId;
           this.setState(currentState);
           this.init();
-          params.goTo("/sala-chat");
+          params.goTo("/room-up");
         });
     } else {
       console.error("No hay user Id");

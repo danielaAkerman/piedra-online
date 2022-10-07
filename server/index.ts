@@ -1,5 +1,5 @@
 import * as express from "express";
-// import { firestore, rtdb } from "./db";
+import { firestore, rtdb } from "./db";
 import { v4 as uuidv4 } from "uuid";
 import * as cors from "cors";
 
@@ -10,6 +10,8 @@ app.use(express.json());
 app.use(cors());
 
 // console.log(process.env)
+const usersCollection = firestore.collection("users");
+const roomsCollection = firestore.collection("rooms");
 
 app.get("/env", (req, res) => {
   res.json({
@@ -27,6 +29,25 @@ app.get("/hola", (req, res) => {
   res.json({
     message: "hola soy el server",
   });
+});
+
+app.post("/auth", function (req, res) {
+  const { name } = req.body;
+  usersCollection
+    .where("name", "==", name)
+    .get()
+    .then((resp) => {
+      if (resp.empty) {
+        res.status(404).json({
+          message: "not found",
+        });
+      } else {
+        res.json({
+          id: resp.docs[0].id,
+          nombre: resp.docs[0].data().nombre,
+        });
+      }
+    });
 });
 
 app.use(express.static("./dist"));
