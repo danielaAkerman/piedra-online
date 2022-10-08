@@ -32,23 +32,82 @@ app.get("/hola", (req, res) => {
 });
 
 app.post("/auth", function (req, res) {
-  const { name } = req.body;
+  const { userName } = req.body;
   usersCollection
-    .where("name", "==", name)
+    .where("userName", "==", userName)
     .get()
     .then((resp) => {
       if (resp.empty) {
-        res.status(404).json({
-          message: "not found",
+        usersCollection.add(req.body).then((newUserRef) => {
+          res.json({ id: newUserRef.id });
         });
       } else {
         res.json({
           id: resp.docs[0].id,
-          nombre: resp.docs[0].data().nombre,
+          // nombre: resp.docs[0].data().nombre,
         });
       }
     });
 });
+
+app.post("/rooms", (req, res) => {
+  const { userId } = req.body;
+  usersCollection
+    .doc(userId.toString())
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        const roomLongId = uuidv4();
+        const roomRef = rtdb.ref("rooms/" + roomLongId);
+        roomRef
+          .set({
+            // messages: [],
+            owner: userId,
+          })
+          .then((rtdbRes) => {
+            const roomId = 1000 + Math.trunc(Math.random() * 999);
+            roomsCollection
+              .doc(roomId.toString())
+              .set({
+                rtdbRoomId: roomLongId,
+              })
+              .then(() => {
+                res.json({
+                  id: roomId.toString(),
+                  rtdbRoomId: roomLongId,
+                });
+              });
+          });
+      } else {
+        res.status(401).json({
+          message: "User not found",
+        });
+      }
+    });
+});
+
+app.get("/rooms/:roomId", (req, res) => {
+  const { userId } = req.query;
+  const { roomId } = req.params;
+  usersCollection
+    .doc(userId.toString())
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        roomsCollection
+          .doc(roomId)
+          .get()
+          .then((snap) => {
+            res.json(snap.data());
+          });
+      } else {
+        res.status(401).json({
+          message: "Room not found",
+        });
+      }
+    });
+});
+
 
 app.use(express.static("./dist"));
 

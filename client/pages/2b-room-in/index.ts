@@ -1,6 +1,6 @@
 import { state } from "../../state";
 
-export function initPageRoomIn(container) {
+export function initPageRoomIn(params) {
   const div = document.createElement("div");
   div.innerHTML = `
   <p class="titulo">Hola ${state.getState().userName}</p>
@@ -15,10 +15,10 @@ export function initPageRoomIn(container) {
   const button = div.querySelector(".button") as HTMLElement;
 
   button.addEventListener("click", () => {
-    const roomId = input.shadowRoot.querySelector("input").value;
-    state.addRoomId(roomId);
+    const roomId = input.shadowRoot!.querySelector("input")!.value;
+    state.entrarSala(roomId, params);
 
-    container.goTo("/instructions");
+    // params.goTo("/instructions");
   });
 
   const style = document.createElement("style");

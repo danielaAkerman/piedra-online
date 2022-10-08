@@ -19,7 +19,7 @@ export function initPageWelcome(params) {
     const userName =
       input.shadowRoot!.querySelector("input")!.value[0].toUpperCase() +
       input.shadowRoot!.querySelector("input")!.value.slice(1);
-    state.setUserName(userName, params);
+    state.setUserName(userName);
     state.setNewRoom(params)
     // params.goTo("/room-up");
   });
@@ -28,7 +28,7 @@ export function initPageWelcome(params) {
     const userName =
       input.shadowRoot!.querySelector("input")!.value[0].toUpperCase() +
       input.shadowRoot!.querySelector("input")!.value.slice(1);
-    state.setUserName(userName, params);
+    state.setUserName(userName)
     params.goTo("/room-in");
   });
 

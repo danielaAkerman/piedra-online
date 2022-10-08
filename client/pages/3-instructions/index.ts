@@ -1,6 +1,6 @@
 import { state } from "../../state";
 
-export function initPageInstructions(container) {
+export function initPageInstructions(params) {
   const div = document.createElement("div");
   div.innerHTML = `
     <h1 class="titulo">Instrucciones:</h1>
@@ -15,8 +15,8 @@ export function initPageInstructions(container) {
     
       button.addEventListener("click", () => {
         // LISTO PARA JUGAR
-        // container.goTo("/waiting-for");
-        container.goTo("/game");
+        state.setStatus(params, 'ok', "/game")
+        // params.goTo("/game");
       });
 
   const style = document.createElement("style");

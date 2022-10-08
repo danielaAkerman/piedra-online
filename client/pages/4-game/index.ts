@@ -9,7 +9,8 @@ export function initPageGame(container) {
     counter--;
     if (counter < 0) {
       clearInterval(intervalId);
-      container.goTo("/time-out");
+      state.setStatus(container, "busy", "/time-out")
+      // container.goTo("/time-out");
     }
   }, 1000);
 
@@ -76,8 +77,10 @@ export function initPageGame(container) {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    bottom: -10px;
+    position: relative;
   }
-  .counter{
+  .counter, countdown-comp{
     flex-grow: 1;
   }
   .hands-container{
