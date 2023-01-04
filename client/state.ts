@@ -1,5 +1,6 @@
-const url = "https://piedra-online.onrender.com";
+// const url = "https://piedra-online.onrender.com";
 // const url = "http://localhost:3000";
+const url = process.env.url || "http://localhost:3000";
 
 export const state = {
   data: {
