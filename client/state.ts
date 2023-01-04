@@ -21,8 +21,10 @@ export const state = {
   listeners: [],
 
   init() {
-    // const localState = localStorage.getItem("game-state");
-    // state.setState(JSON.parse(localState));
+    const localState = localStorage.getItem("game-state");
+    if (localState) {
+      state.setState(JSON.parse(localState));
+    }
   },
 
   getState() {
@@ -119,6 +121,7 @@ export const state = {
     const currentState = this.getState();
     currentState.myStatus = status
     state.setState(currentState)
+
     params.goTo(route)
   },
 
