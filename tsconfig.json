@@ -3,7 +3,8 @@
         "target": "ESNext",
         "moduleResolution": "node",
         "resolveJsonModule": true,
-        "strictNullChecks": false
+        "strictNullChecks": false,
+        "module": "CommonJS"
     },
     
     "files": ["./server/index.ts"],
