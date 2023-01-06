@@ -1,6 +1,4 @@
-// const url = "https://piedra-online.onrender.com";
-// const url = "http://localhost:3000";
-const url = process.env.url || "http://localhost:3000";
+const url = process.env.url
 
 export const state = {
   data: {
@@ -8,7 +6,7 @@ export const state = {
     userId: "",
     roomId: "",
     resultadoParcial: "",
-    oponentUserName: "",
+    rivalName: "",
     myStatus: "busy",
     oponentStatus: "",
     currentGame: {

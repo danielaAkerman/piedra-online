@@ -1,17 +1,14 @@
 * {
-  font-family: "Delius", cursive;
+  font-family: Arial, Helvetica, sans-serif;
   font-size: 30px;
   font-weight: bold;
   box-sizing: border-box;
   text-align: center;
 }
-*::selection {
-  background-color: #f4a261;
-}
 
 body {
   margin: 0;
-  background-color: #f4a261;
+  background-color: #071624;
   padding: 10px;
   height: 100vh;
 }
@@ -22,11 +19,11 @@ body {
   padding: 10px;
   max-width: 500px;
   margin: 0 auto;
-  border-radius: 10% 7% 44% 5% / 2% 25% 11% 10%;
+  /* border-radius: 10% 7% 44% 5% / 2% 25% 11% 10%; */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   background-color: #feffee;
-  background-image: url(./img/fondo.png);
+  /* background-image: url(./img/fondo.png); */
 }

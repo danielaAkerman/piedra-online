@@ -3,9 +3,9 @@ import { state } from "../../state";
 export function initPageInstructions(params) {
   const div = document.createElement("div");
   div.innerHTML = `
-    <h1 class="titulo">Instrucciones:</h1>
+    <h1 class="titulo">INSTRUCCIONES</h1>
     <br>
-    <p class="text">Tenés 3 segundos<br>para seleccionar<br>"piedra", "papel"<br>o "tijeras"</p>
+    <p class="text">TENÉS 3 SEGUNDOS<br>PARA SELECCIONAR<br>PIEDRA, PAPEL<br>O TIJERA</p>
     <br>
     <br>
     <button-comp class="button">JUGAR AHORA</button-comp>
@@ -22,10 +22,14 @@ export function initPageInstructions(params) {
   const style = document.createElement("style");
   style.textContent = `
   .titulo{
-    font-size: 48px;
+    font-size: 32px;
+    text-align: center;
+    font-weight: lighter;
   }
   .text{
     font-size: 24px;
+    text-align: center;
+    font-weight: lighter;
   }
 `;
 

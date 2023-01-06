@@ -1,6 +1,8 @@
 import { state } from "../../state";
 
 export function initPageScore(container) {
+  const myName = state.getState().userName;
+  const rivalName = (state.getState().rivalName || "compu").toUpperCase() ;
   const myScore = state.getState().historyScore.myPlay;
   const pcScore = state.getState().historyScore.pcPlay;
   const div = document.createElement("div");
@@ -10,8 +12,8 @@ export function initPageScore(container) {
     <br>
     <br>
     <div class="score">
-    <p class="my-score"> ${state.getState().userName}: ${myScore}</p>
-    <p class="pc-score"> Compu: ${pcScore}</p>
+    <p class="my-score"> ${myName}: ${myScore}</p>
+    <p class="pc-score"> ${rivalName}: ${pcScore}</p>
     </div>
     <br>
     <button-comp class="button">SEGUIR JUGANDO</button-comp>
@@ -23,6 +25,8 @@ export function initPageScore(container) {
     p{
       font-size: 32px;
       margin: 10px;
+      text-align: center;
+      font-weight: lighter;
     }
   `;
 

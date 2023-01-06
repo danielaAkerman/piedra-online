@@ -3,8 +3,9 @@ import { state } from "../../state";
 export function initPageWelcome(params) {
   const div = document.createElement("div");
   div.innerHTML = `
-  <h1 class="titulo">PIEDRA,<br>PAPEL O<br>TIJERAS</h1>
-  <input-comp label="nombre" type="text" name="nombre" class="input"></input-comp>
+  <h1 class="titulo">PIEDRA<br>PAPEL O<br>TIJERA</h1>
+  <input-comp label="TU NOMBRE" type="text" name="nombre" class="input"></input-comp>
+  <br>
   <br>
   <button-comp class="nuevo-juego">NUEVO JUEGO</button-comp>
   <br>
@@ -16,11 +17,11 @@ export function initPageWelcome(params) {
   const buttonIngresar = div.querySelector(".ingresar-sala") as HTMLElement;
 
   buttonNuevo.addEventListener("click", () => {
-    const userName =
-      input.shadowRoot!.querySelector("input")!.value[0].toUpperCase() +
-      input.shadowRoot!.querySelector("input")!.value.slice(1);
+    const userName = input
+      .shadowRoot!.querySelector("input")!
+      .value.toUpperCase();
     state.setUserName(userName);
-    state.setNewRoom(params)
+    state.setNewRoom(params);
     // params.goTo("/room-up");
   });
 
@@ -28,7 +29,7 @@ export function initPageWelcome(params) {
     const userName =
       input.shadowRoot!.querySelector("input")!.value[0].toUpperCase() +
       input.shadowRoot!.querySelector("input")!.value.slice(1);
-    state.setUserName(userName)
+    state.setUserName(userName);
     params.goTo("/room-in");
   });
 
@@ -37,6 +38,7 @@ export function initPageWelcome(params) {
   .titulo{
     font-size: 58px;
     text-align: center;
+    font-weight: lighter;
   }
 `;
   div.appendChild(style);

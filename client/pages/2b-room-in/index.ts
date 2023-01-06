@@ -3,10 +3,11 @@ import { state } from "../../state";
 export function initPageRoomIn(params) {
   const div = document.createElement("div");
   div.innerHTML = `
-  <p class="titulo">Hola ${state.getState().userName}</p>
-  <h1 class="titulo">Ingresá el número <br> de tu sala</h1>
+  <p class="titulo">HOLA ${(state.getState().userName).toUpperCase()}</p>
+  <h1 class="titulo">INGRESÁ EL ID<br>DE TU SALA</h1>
   <br>
-  <input-comp label="numero de sala" type="number" name="number" class="input"></input-comp>
+  <input-comp label="numero de sala" name="number" class="input"></input-comp>
+  <br>
   <br>
   <button-comp class="button">IR AL JUEGO</button-comp>
   `;
@@ -24,8 +25,9 @@ export function initPageRoomIn(params) {
   const style = document.createElement("style");
   style.textContent = `
   .titulo{
-    font-size: 58px;
+    font-size: 24px;
     text-align: center;
+    font-weight: lighter;
   }
 `;
   div.appendChild(style);
