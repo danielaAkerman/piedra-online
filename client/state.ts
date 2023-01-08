@@ -1,13 +1,14 @@
-const url = process.env.url
+const url = process.env.url;
 
 export const state = {
   data: {
     userName: "",
     userId: "",
     roomId: "",
+    rtdbRoomId: "",
     resultadoParcial: "",
     rivalName: "",
-    myStatus: "busy",
+    ready: false,
     oponentStatus: "",
     myScore: "",
     rivalScore: "",
@@ -82,7 +83,10 @@ export const state = {
         headers: {
           "content-type": "application/json",
         },
-        body: JSON.stringify({ userId: currentState.userId }),
+        body: JSON.stringify({
+          userId: currentState.userId,
+          userName: currentState.userName,
+        }),
       })
         .then((res) => {
           return res.json();
@@ -119,12 +123,12 @@ export const state = {
       });
   },
 
-  setStatus(params, status:string, route:string){
+  setStatus(params, status: string, route: string) {
     const currentState = this.getState();
-    currentState.myStatus = status
-    state.setState(currentState)
+    currentState.myStatus = status;
+    state.setState(currentState);
 
-    params.goTo(route)
+    params.goTo(route);
   },
 
   move(myPlay) {},

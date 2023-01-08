@@ -52,6 +52,7 @@ app.post("/auth", function (req, res) {
 
 app.post("/rooms", (req, res) => {
   const { userId } = req.body;
+  const { userName } = req.body;
   usersCollection
     .doc(userId.toString())
     .get()
@@ -61,8 +62,14 @@ app.post("/rooms", (req, res) => {
         const roomRef = rtdb.ref("rooms/" + roomLongId);
         roomRef
           .set({
-            // messages: [],
-            owner: userId,
+            players: [
+              {
+                userId,
+                userName,
+                score: 0,
+                chose: "",
+              },
+            ],
           })
           .then((rtdbRes) => {
             const roomId = 1000 + Math.trunc(Math.random() * 999);
@@ -107,7 +114,6 @@ app.get("/rooms/:roomId", (req, res) => {
       }
     });
 });
-
 
 app.use(express.static("./dist"));
 
