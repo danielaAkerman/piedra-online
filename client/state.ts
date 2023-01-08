@@ -9,6 +9,8 @@ export const state = {
     rivalName: "",
     myStatus: "busy",
     oponentStatus: "",
+    myScore: "",
+    rivalScore: "",
     currentGame: {
       myPlay: "",
       pcPlay: "",

@@ -2,8 +2,9 @@ import { initPageWelcome } from "./pages/1-welcome";
 import { initPageRoomUp } from "./pages/2a-room-up";
 import { initPageRoomIn } from "./pages/2b-room-in";
 import { initPageInstructions } from "./pages/3-instructions";
-import { initPageGame } from "./pages/4-game";
-import { initPageScore } from "./pages/5-score";
+import { initPageWaiting } from "./pages/4-waiting-for";
+import { initPageGame } from "./pages/5-game";
+import { initPageScore } from "./pages/6-score";
 import { initPageTimeOut } from "./pages/timeout";
 
 const routes = [
@@ -26,6 +27,10 @@ const routes = [
   {
     path: /\/instructions/,
     handler: initPageInstructions,
+  },
+  {
+    path: /\/waiting-for/,
+    handler: initPageWaiting,
   },
   {
     path: /\/game/,

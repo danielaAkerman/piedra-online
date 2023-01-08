@@ -10,12 +10,13 @@ export function initPageGame(container) {
     if (counter < 0) {
       clearInterval(intervalId);
       state.setStatus(container, "busy", "/time-out")
-      // container.goTo("/time-out");
+
     }
   }, 1000);
 
   const div = document.createElement("div");
   div.innerHTML = `
+    <scorebar-comp></scorebar-comp>
     <countdown-comp></countdown-comp>
     <div class="hands-container">
       <div class="one-hand" type="piedra">
@@ -41,6 +42,7 @@ export function initPageGame(container) {
       const opciones = [piedra, papel, tijeras];
 
       div.innerHTML = `
+
           <img class="hand-selected" style="transform: rotate(180deg); height: 40%; display: block; margin: 0 auto" src=${opciones.find(
             (o) => o.includes(oponentSelection)
           )}></div>
@@ -72,6 +74,7 @@ export function initPageGame(container) {
   .container{
     margin: 0px;
     width: 100%;
+    height: 100vh;
     max-width: 500px;
     margin: 0 auto;
     display: flex;
