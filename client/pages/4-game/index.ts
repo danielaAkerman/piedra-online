@@ -1,7 +1,7 @@
 import { state } from "../../state";
 const piedra = require("../../img/piedra.png");
 const papel = require("../../img/papel.png");
-const tijeras = require("../../img/tijeras.png");
+const tijeras = require("../../img/tijera.png");
 
 export function initPageGame(container) {
   let counter = 3;
@@ -91,7 +91,7 @@ export function initPageGame(container) {
     bottom: -10px;
   }
   .hand-img{
-    height: 220px;
+    height: 100px;
   }
   .one-hand{
     width: 30%;
@@ -100,9 +100,6 @@ export function initPageGame(container) {
     align-item: center;
     justify-content: center;
     cursor: pointer;
-  }
-  *::selection{
-    background-color: #f4a261;
   }
   `;
   div.appendChild(style);

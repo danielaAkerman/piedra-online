@@ -1,7 +1,7 @@
 import { state } from "../../state";
 
 export function initPageScore(container) {
-  const myName = state.getState().userName;
+  const myName = (state.getState().userName).toUpperCase();
   const rivalName = (state.getState().rivalName || "compu").toUpperCase() ;
   const myScore = state.getState().historyScore.myPlay;
   const pcScore = state.getState().historyScore.pcPlay;

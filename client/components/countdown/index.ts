@@ -17,7 +17,7 @@ customElements.define(
       }, 1000);
     }
     render(c) {
-      this.shadowRoot.replaceChildren();
+      this.shadowRoot!.replaceChildren();
       const div = document.createElement("div");
       div.innerHTML = `
       <h2 class="counter">${c}</h2>`;
@@ -32,6 +32,7 @@ customElements.define(
         }
         .counter{
           font-size: 120px;
+          font-weight: lighter;
         }
         *::selection{
           background-color: #f4a261;
