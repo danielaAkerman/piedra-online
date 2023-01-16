@@ -26,9 +26,9 @@ export function initPageWelcome(params) {
   });
 
   buttonIngresar.addEventListener("click", () => {
-    const userName =
-      input.shadowRoot!.querySelector("input")!.value[0].toUpperCase() +
-      input.shadowRoot!.querySelector("input")!.value.slice(1);
+    const userName = input
+      .shadowRoot!.querySelector("input")!
+      .value.toUpperCase();
     state.setUserName(userName);
     params.goTo("/room-in");
   });

@@ -115,6 +115,33 @@ app.get("/rooms/:roomId", (req, res) => {
     });
 });
 
+app.get("/info-room/:rtdbRoomId", function (req, res) {
+  const { rtdbRoomId } = req.params;
+
+  const playersRef = rtdb.ref("/rooms/" + rtdbRoomId + "/players");
+  playersRef.get().then((resp) => {
+    res.json(resp); 
+  });
+});
+
+app.post("/agregar-player/:rtdbRoomId", function (req, res) {
+  const { userId } = req.body;
+  const { userName } = req.body;
+  const { rtdbRoomId } = req.params;
+  const playersRef = rtdb.ref("/rooms/" + rtdbRoomId + "/players");
+  playersRef.push(
+    {
+      userId,
+      userName,
+      score: 0,
+      chose: "",
+    },
+    function () {
+      res.json("ok");
+    }
+  );
+});
+
 app.use(express.static("./dist"));
 
 app.get("*", (req, res) => {

@@ -105,6 +105,7 @@ export const state = {
   },
 
   entrarSala(roomId, params) {
+    // A LA DB LE CONSULTO EL ID LARGO DE LA RTDB
     const currentState = this.getState();
     fetch(url + "/rooms/" + roomId + "?userId=" + currentState.userId)
       .then((res) => {
@@ -114,11 +115,42 @@ export const state = {
         if (data.message) {
           console.error("Not found");
         } else {
-          currentState.roomId = roomId;
           currentState.rtdbRoomId = data.rtdbRoomId;
           this.setState(currentState);
-          // state.init();
-          params.goTo("/instructions");
+
+          // LE PREGUNTO A LA RTDB CUANTOS PLAYERS TIENE Y QUIENES SON
+
+          fetch(
+            url +
+              "/info-room/" +
+              data.rtdbRoomId +
+              "?userId=" +
+              currentState.userId +
+              "&userName=" +
+              currentState.userName
+          )
+            .then((res) => {
+              return res.json();
+            })
+            .then((data) => {
+              if (data[1]) {
+                console.log("HAY DOS");
+                if (
+                  data[0].userName == currentState.userName ||
+                  data[1].userName == currentState.userName
+                ) {
+                  console.log("HAY DOS PLAYERS PERO UNO O UNA SOS VOS");
+                }
+              } else if (data[0]) {
+                console.log("HAY UNO O UNA");
+                if (data[0].userName != currentState.userName) {
+                  console.log("HAY UN PLAYER PERO NO SOS VOS");
+                } else if(data[0].userName == currentState.userName ){
+                  console.log("YA SOS PLAYER");
+
+                }
+              }
+            });
         }
       });
   },
