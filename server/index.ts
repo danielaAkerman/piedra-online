@@ -115,6 +115,15 @@ app.get("/rooms/:roomId", (req, res) => {
     });
 });
 
+app.get("/cuantos-players/:rtdbRoomId", function (req, res) {
+  const { rtdbRoomId } = req.params;
+
+  const playersRef = rtdb.ref("/rooms/" + rtdbRoomId + "/players");
+  playersRef.get().then((resp) => {
+    res.json(resp.numChildren()); 
+  });
+});
+
 app.get("/info-room/:rtdbRoomId", function (req, res) {
   const { rtdbRoomId } = req.params;
 

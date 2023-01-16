@@ -8,6 +8,7 @@ export const state = {
     rtdbRoomId: "",
     resultadoParcial: "",
     rivalName: "",
+    rivalId: "",
     ready: false,
     oponentStatus: "",
     myScore: "",
@@ -36,12 +37,12 @@ export const state = {
 
   setState(newState) {
     this.data = newState;
-    console.log("State: ", newState);
+    console.log("State: ", this.data);
 
     for (const call of this.listeners) {
       call(newState);
     }
-    localStorage.setItem("game-state", JSON.stringify(newState));
+    // localStorage.setItem("game-state", JSON.stringify(newState));
   },
 
   subscribe(callback: (any) => any) {
@@ -70,7 +71,7 @@ export const state = {
         // } else {
         currentState.userId = data.id;
         // currentState.nombre = data.nombre;
-        // this.setState(currentState);
+        this.setState(currentState);
         // }
       });
   },
@@ -118,39 +119,102 @@ export const state = {
           currentState.rtdbRoomId = data.rtdbRoomId;
           this.setState(currentState);
 
-          // LE PREGUNTO A LA RTDB CUANTOS PLAYERS TIENE Y QUIENES SON
+
+
+
+          // LE PREGUNTO A LA RTDB CUANTOS PLAYERS TIENE
 
           fetch(
             url +
-              "/info-room/" +
-              data.rtdbRoomId +
-              "?userId=" +
-              currentState.userId +
-              "&userName=" +
-              currentState.userName
+              "/cuantos-players/" +
+              data.rtdbRoomId
           )
             .then((res) => {
               return res.json();
             })
-            .then((data) => {
-              if (data[1]) {
-                console.log("HAY DOS");
-                if (
-                  data[0].userName == currentState.userName ||
-                  data[1].userName == currentState.userName
-                ) {
-                  console.log("HAY DOS PLAYERS PERO UNO O UNA SOS VOS");
-                }
-              } else if (data[0]) {
-                console.log("HAY UNO O UNA");
-                if (data[0].userName != currentState.userName) {
-                  console.log("HAY UN PLAYER PERO NO SOS VOS");
-                } else if(data[0].userName == currentState.userName ){
-                  console.log("YA SOS PLAYER");
+            .then((data) => {console.log("ESTA ROOM TIENE", data, "PARTICIPANTES")})
 
-                }
-              }
-            });
+
+            // SI TIENE UN PLAYER
+
+
+            // LE PREGUNTO SI SOY YO EL PLAYER
+
+            // SI SOY NO PASA NADA
+
+            // SI NO SOY YO, ME VOY A AGREGAR COMO SEGUNDA PLAYER
+            // LUEGO REDIRECT TO instructions
+
+
+
+
+
+
+            // SI TIENE DOS PLAYERS
+
+            // LE PREGUNTO SI MI USERNAME COINCIDE CON ALGUNO DE LOS USERNAMES DE LOS PLAYERS
+
+            // SI COINCIDE MI NOMBRE, ESTÁ TODO BIEN PORQUE YA SOY PLAYER, REDIRECT TO instructions
+
+            // SI MI NOMBRE NO COINCIDE, ESTOY INTENTANDO ENTRAR EN UNA SALA LLENA, REDIRECT TO sala-llena
+
+
+          // fetch(
+          //   url +
+          //     "/info-room/" +
+          //     data.rtdbRoomId +
+          //     "?userId=" +
+          //     currentState.userId +
+          //     "&userName=" +
+          //     currentState.userName
+          // )
+          //   .then((res) => {
+          //     return res.json();
+          //   })
+          //   .then((data) => {
+          //     if (data[1]) {
+          //       console.log("HAY DOS");
+          //       if (
+          //         data[0].userName == currentState.userName ||
+          //         data[1].userName == currentState.userName
+          //       ) {
+          //         console.log("HAY DOS PLAYERS PERO UNO O UNA SOS VOS");
+          //         if (data[0].userName == currentState.userName) {
+          //           currentState.rivalName = data[1].userName;
+          //           currentState.rivalId = data[1].userId;
+          //         } else if (data[1].userName == currentState.userName) {
+          //           currentState.rivalName = data[0].userName;
+          //           currentState.rivalId = data[0].userId;
+          //         }
+          //         state.setState(currentState);
+          //       }
+          //     } else if (data[0]) {
+          //       console.log("HAY UNO O UNA");
+          //       if (data[0].userName != currentState.userName) {
+          //         console.log("HAY UN PLAYER PERO NO SOS VOS");
+          //         // ME TENGO QUE AGREGAR A LOS PLAYERS
+
+          //         fetch(url + "/agregar-player/" + currentState.rtdbRoomId, {
+          //           method: "post",
+          //           headers: {
+          //             "content-type": "application/json",
+          //           },
+          //           body: JSON.stringify({
+          //             userId: currentState.userId,
+          //             userName: currentState.userName,
+          //           }),
+          //         })
+          //           .then((res) => {
+          //             return res.json();
+          //           })
+          //           .then((data) => {
+          //             console.log("ENVIADOS LOS DATOS DEL NUEVO PLAYER");
+          //           });
+          //       } else if (data[0].userName == currentState.userName) {
+          //         console.log("YA SOS PLAYER");
+          //       }
+          //     }
+          //   });
         }
       });
   },
