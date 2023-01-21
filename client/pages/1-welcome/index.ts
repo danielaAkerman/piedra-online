@@ -16,12 +16,15 @@ export function initPageWelcome(params) {
   const buttonNuevo = div.querySelector(".nuevo-juego") as HTMLElement;
   const buttonIngresar = div.querySelector(".ingresar-sala") as HTMLElement;
 
+  const currentState = state.getState();
+
   buttonNuevo.addEventListener("click", () => {
     const userName = input
       .shadowRoot!.querySelector("input")!
       .value.toUpperCase();
-    state.setUserName(userName);
-    state.setNewRoom(params);
+    currentState.userName = userName;
+    state.setState(currentState);
+    state.setUserName(params);
     // params.goTo("/room-up");
   });
 
@@ -29,7 +32,9 @@ export function initPageWelcome(params) {
     const userName = input
       .shadowRoot!.querySelector("input")!
       .value.toUpperCase();
-    state.setUserName(userName);
+    currentState.userName = userName;
+    state.setState(currentState);
+    state.setUserName(params);
     params.goTo("/room-in");
   });
 

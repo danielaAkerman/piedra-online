@@ -19,18 +19,6 @@ app.get("/env", (req, res) => {
   });
 });
 
-app.get("/lugar", (req, res) => {
-  res.json({
-    lugar: process.env.LUGAR,
-  });
-});
-
-app.get("/hola", (req, res) => {
-  res.json({
-    message: "hola soy el server",
-  });
-});
-
 app.post("/auth", function (req, res) {
   const { userName } = req.body;
   usersCollection
@@ -44,7 +32,6 @@ app.post("/auth", function (req, res) {
       } else {
         res.json({
           id: resp.docs[0].id,
-          // nombre: resp.docs[0].data().nombre,
         });
       }
     });
@@ -137,7 +124,7 @@ app.post("/agregar-player/:rtdbRoomId", function (req, res) {
   const { userId } = req.body;
   const { userName } = req.body;
   const { rtdbRoomId } = req.params;
-  const playersRef = rtdb.ref("/rooms/" + rtdbRoomId + "/players");
+  const playersRef = (rtdb.ref("/rooms/" + rtdbRoomId + "/players"));
   playersRef.push(
     {
       userId,

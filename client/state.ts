@@ -49,12 +49,8 @@ export const state = {
     this.listeners.push(callback);
   },
 
-  setUserName(name) {
+  setUserName(params) {
     const currentState = this.getState();
-    currentState.userName = name;
-    // state.setState(currentState);
-    // Si no existe, lo crea.
-    // Si existe el userName, trae el ID,
     fetch(url + "/auth", {
       method: "post",
       headers: {
@@ -66,13 +62,15 @@ export const state = {
         return res.json();
       })
       .then((data) => {
-        // if (data.message) {
-        //   console.error("no existe el user");
-        // } else {
         currentState.userId = data.id;
-        // currentState.nombre = data.nombre;
+        console.log(
+          "se agrego el user",
+          currentState.userName,
+          currentState.userId
+        );
+
         this.setState(currentState);
-        // }
+        this.setNewRoom(params)
       });
   },
 
@@ -93,6 +91,7 @@ export const state = {
           return res.json();
         })
         .then((data) => {
+          console.log("LA DATAAAAAAA", data);
           currentState.roomId = data.id;
           currentState.rtdbRoomId = data.rtdbRoomId;
           this.setState(currentState);
@@ -119,102 +118,84 @@ export const state = {
           currentState.rtdbRoomId = data.rtdbRoomId;
           this.setState(currentState);
 
-
-
-
           // LE PREGUNTO A LA RTDB CUANTOS PLAYERS TIENE
 
-          fetch(
-            url +
-              "/cuantos-players/" +
-              data.rtdbRoomId
-          )
+          fetch(url + "/cuantos-players/" + data.rtdbRoomId)
             .then((res) => {
               return res.json();
             })
-            .then((data) => {console.log("ESTA ROOM TIENE", data, "PARTICIPANTES")})
+            .then((data) => {
+              console.log("ESTA ROOM TIENE", data, "PARTICIPANTES");
 
+              // SI TIENE UN PLAYER
+              if (data == 1) {
+                // LE PREGUNTO SI SOY YO EL PLAYER
+                fetch(url + "/info-room/" + currentState.rtdbRoomId)
+                  .then((res) => {
+                    return res.json();
+                  })
+                  .then((data) => {
+                    if (data[0].userName == currentState.userName) {
+                      // SI SOY NO PASA NADA
+                      console.log(
+                        "Esta room tiene un solo player y sos vos:",
+                        data[0].userName
+                      );
+                    } else if (data[0].userName != currentState.userName) {
+                      // SI NO SOY YO, ME VOY A AGREGAR COMO SEGUNDA PLAYER
+                      console.log(
+                        "Esta room tiene un solo player y NO sos vos, tu rival es:",
+                        data[0].userName,
+                        "Te agregas como 2do player"
+                      );
+                      currentState.rivalName = data[0].userName;
+                      fetch(
+                        url + "/agregar-player/" + currentState.rtdbRoomId,
+                        {
+                          method: "post",
+                          headers: {
+                            "content-type": "application/json",
+                          },
+                          body: JSON.stringify({
+                            userName: currentState.userName,
+                            userId: currentState.userId,
+                          }),
+                        }
+                      )
+                        .then((res) => {
+                          return res.json();
+                        })
+                        .then((data) => {
+                          console.log(data);
+                          // LUEGO REDIRECT TO instructions
+                          params.goTo("/instructions");
+                        });
+                    }
+                  });
+              } else if (data == 2) {
+                // SI TIENE DOS PLAYERS
+                console.log("La room tiene dos players");
+                // LE PREGUNTO SI MI USERNAME COINCIDE CON ALGUNO DE LOS USERNAMES DE LOS PLAYERS
+                fetch(url + "/info-room/" + currentState.rtdbRoomId)
+                  .then((res) => {
+                    return res.json();
+                  })
+                  .then((resp) => {
+                    console.log(resp);
+                    if (
+                      resp[0].userName == currentState.userName ||
+                      resp[1].userName == currentState.userName
+                    ) {
+                      console.log("Uno de los players sos vos");
+                      console.log(resp[0].userName);
+                      console.log(resp[1].userName);
+                      // SI COINCIDE MI NOMBRE, ESTÁ TODO BIEN PORQUE YA SOY PLAYER, REDIRECT TO instructions
+                    }
+                  });
+              }
+            });
 
-            // SI TIENE UN PLAYER
-
-
-            // LE PREGUNTO SI SOY YO EL PLAYER
-
-            // SI SOY NO PASA NADA
-
-            // SI NO SOY YO, ME VOY A AGREGAR COMO SEGUNDA PLAYER
-            // LUEGO REDIRECT TO instructions
-
-
-
-
-
-
-            // SI TIENE DOS PLAYERS
-
-            // LE PREGUNTO SI MI USERNAME COINCIDE CON ALGUNO DE LOS USERNAMES DE LOS PLAYERS
-
-            // SI COINCIDE MI NOMBRE, ESTÁ TODO BIEN PORQUE YA SOY PLAYER, REDIRECT TO instructions
-
-            // SI MI NOMBRE NO COINCIDE, ESTOY INTENTANDO ENTRAR EN UNA SALA LLENA, REDIRECT TO sala-llena
-
-
-          // fetch(
-          //   url +
-          //     "/info-room/" +
-          //     data.rtdbRoomId +
-          //     "?userId=" +
-          //     currentState.userId +
-          //     "&userName=" +
-          //     currentState.userName
-          // )
-          //   .then((res) => {
-          //     return res.json();
-          //   })
-          //   .then((data) => {
-          //     if (data[1]) {
-          //       console.log("HAY DOS");
-          //       if (
-          //         data[0].userName == currentState.userName ||
-          //         data[1].userName == currentState.userName
-          //       ) {
-          //         console.log("HAY DOS PLAYERS PERO UNO O UNA SOS VOS");
-          //         if (data[0].userName == currentState.userName) {
-          //           currentState.rivalName = data[1].userName;
-          //           currentState.rivalId = data[1].userId;
-          //         } else if (data[1].userName == currentState.userName) {
-          //           currentState.rivalName = data[0].userName;
-          //           currentState.rivalId = data[0].userId;
-          //         }
-          //         state.setState(currentState);
-          //       }
-          //     } else if (data[0]) {
-          //       console.log("HAY UNO O UNA");
-          //       if (data[0].userName != currentState.userName) {
-          //         console.log("HAY UN PLAYER PERO NO SOS VOS");
-          //         // ME TENGO QUE AGREGAR A LOS PLAYERS
-
-          //         fetch(url + "/agregar-player/" + currentState.rtdbRoomId, {
-          //           method: "post",
-          //           headers: {
-          //             "content-type": "application/json",
-          //           },
-          //           body: JSON.stringify({
-          //             userId: currentState.userId,
-          //             userName: currentState.userName,
-          //           }),
-          //         })
-          //           .then((res) => {
-          //             return res.json();
-          //           })
-          //           .then((data) => {
-          //             console.log("ENVIADOS LOS DATOS DEL NUEVO PLAYER");
-          //           });
-          //       } else if (data[0].userName == currentState.userName) {
-          //         console.log("YA SOS PLAYER");
-          //       }
-          //     }
-          //   });
+          // SI MI NOMBRE NO COINCIDE, ESTOY INTENTANDO ENTRAR EN UNA SALA LLENA, REDIRECT TO sala-llena
         }
       });
   },
