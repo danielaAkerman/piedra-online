@@ -124,8 +124,8 @@ app.post("/agregar-player/:rtdbRoomId", function (req, res) {
   const { userId } = req.body;
   const { userName } = req.body;
   const { rtdbRoomId } = req.params;
-  const playersRef = (rtdb.ref("/rooms/" + rtdbRoomId + "/players"));
-  playersRef.push(
+  const playersRef = (rtdb.ref("/rooms/" + rtdbRoomId + "/players/1"));
+  playersRef.set(
     {
       userId,
       userName,

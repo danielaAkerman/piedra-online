@@ -24,12 +24,12 @@ export const state = {
   },
   listeners: [],
 
-  init() {
-    const localState = localStorage.getItem("game-state");
-    if (localState) {
-      state.setState(JSON.parse(localState));
-    }
-  },
+  // init() {
+  //   const localState = localStorage.getItem("game-state");
+  //   if (localState) {
+  //     state.setState(JSON.parse(localState));
+  //   }
+  // },
 
   getState() {
     return this.data;
@@ -49,7 +49,7 @@ export const state = {
     this.listeners.push(callback);
   },
 
-  setUserName(params) {
+  setUserName(room, params) {
     const currentState = this.getState();
     fetch(url + "/auth", {
       method: "post",
@@ -63,14 +63,13 @@ export const state = {
       })
       .then((data) => {
         currentState.userId = data.id;
-        console.log(
-          "se agrego el user",
-          currentState.userName,
-          currentState.userId
-        );
 
         this.setState(currentState);
-        this.setNewRoom(params)
+        if (room == "room-up") {
+          this.setNewRoom(params);
+        } else if (room == "room-in") {
+          params.goTo("/room-in");
+        }
       });
   },
 
@@ -91,17 +90,15 @@ export const state = {
           return res.json();
         })
         .then((data) => {
-          console.log("LA DATAAAAAAA", data);
           currentState.roomId = data.id;
           currentState.rtdbRoomId = data.rtdbRoomId;
           this.setState(currentState);
           // this.init();
           params.goTo("/room-up");
         });
+    } else {
+      console.error("No hay user Id");
     }
-    // else {
-    //   console.error("No hay user Id");
-    // }
   },
 
   entrarSala(roomId, params) {

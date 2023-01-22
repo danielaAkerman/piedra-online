@@ -24,7 +24,7 @@ export function initPageWelcome(params) {
       .value.toUpperCase();
     currentState.userName = userName;
     state.setState(currentState);
-    state.setUserName(params);
+    state.setUserName("room-up", params);
     // params.goTo("/room-up");
   });
 
@@ -34,7 +34,7 @@ export function initPageWelcome(params) {
       .value.toUpperCase();
     currentState.userName = userName;
     state.setState(currentState);
-    state.setUserName(params);
+    state.setUserName("room-in", params);
     params.goTo("/room-in");
   });
 
