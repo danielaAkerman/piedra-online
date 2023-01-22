@@ -184,9 +184,16 @@ export const state = {
                       resp[1].userName == currentState.userName
                     ) {
                       console.log("Uno de los players sos vos");
-                      console.log(resp[0].userName);
-                      console.log(resp[1].userName);
+                      params.goTo("/instructions");
                       // SI COINCIDE MI NOMBRE, ESTÁ TODO BIEN PORQUE YA SOY PLAYER, REDIRECT TO instructions
+                    } else if (
+                      resp[0].userName != currentState.userName ||
+                      resp[1].userName != currentState.userName
+                      ) {
+                        console.log(
+                          "No podes ingresar a esta sala porque ya tiene dos participantes y vos no sos uno de ellos"
+                          );
+                          params.goTo("/sala-llena");
                     }
                   });
               }

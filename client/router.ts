@@ -6,6 +6,7 @@ import { initPageWaiting } from "./pages/4-waiting-for";
 import { initPageGame } from "./pages/5-game";
 import { initPageScore } from "./pages/6-score";
 import { initPageTimeOut } from "./pages/timeout";
+import { initPageSalaLlena } from "./pages/3b-sala-llena";
 
 const routes = [
   {
@@ -43,6 +44,10 @@ const routes = [
   {
     path: /\/time-out/,
     handler: initPageTimeOut,
+  },
+  {
+    path: /\/sala-llena/,
+    handler: initPageSalaLlena,
   },
 ];
 
