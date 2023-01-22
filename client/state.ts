@@ -146,6 +146,7 @@ export const state = {
                         "Te agregas como 2do player"
                       );
                       currentState.rivalName = data[0].userName;
+                      state.setState(currentState)
                       fetch(
                         url + "/agregar-player/" + currentState.rtdbRoomId,
                         {
@@ -184,6 +185,13 @@ export const state = {
                       resp[1].userName == currentState.userName
                     ) {
                       console.log("Uno de los players sos vos");
+                      // PARA AGREGAR EL NOMBRE DEL RIVAL EN MI STATE:
+                      if(resp[0].userName == currentState.userName){
+                        currentState.rivalName = resp[1].userName
+                      } else if(resp[1].userName == currentState.userName){
+                        currentState.rivalName = resp[0].userName
+                      }
+                      state.setState(currentState)
                       params.goTo("/instructions");
                       // SI COINCIDE MI NOMBRE, ESTÁ TODO BIEN PORQUE YA SOY PLAYER, REDIRECT TO instructions
                     } else if (
