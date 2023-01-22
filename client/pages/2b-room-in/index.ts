@@ -1,9 +1,10 @@
 import { state } from "../../state";
 
 export function initPageRoomIn(params) {
+  const currentState = state.getState();
   const div = document.createElement("div");
   div.innerHTML = `
-  <p class="titulo">HOLA ${(state.getState().userName).toUpperCase()}</p>
+  <p class="titulo">HOLA ${state.getState().userName.toUpperCase()}</p>
   <h1 class="titulo">INGRESÁ EL ID<br>DE TU SALA</h1>
   <br>
   <input-comp label="numero de sala" name="number" class="input"></input-comp>
@@ -17,6 +18,8 @@ export function initPageRoomIn(params) {
 
   button.addEventListener("click", () => {
     const roomId = input.shadowRoot!.querySelector("input")!.value;
+    currentState.roomId = roomId;
+    state.setState(currentState);
     state.entrarSala(roomId, params);
 
     // params.goTo("/instructions");

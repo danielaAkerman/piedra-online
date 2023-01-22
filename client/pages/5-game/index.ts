@@ -9,7 +9,7 @@ export function initPageGame(container) {
     counter--;
     if (counter < 0) {
       clearInterval(intervalId);
-      state.setStatus(container, "busy", "/time-out")
+      state.setStatus(container, "busy", "/score")
 
     }
   }, 1000);
