@@ -1,3 +1,4 @@
+import { rtdb } from "./rtdb";
 const url = process.env.url;
 
 export const state = {
@@ -10,7 +11,7 @@ export const state = {
     rivalName: "",
     rivalId: "",
     myStatus: "busy",
-    oponentStatus: "",
+    rivalStatus: "",
     myScore: "",
     rivalScore: "",
     currentGame: {
@@ -206,6 +207,44 @@ export const state = {
       });
   },
 
+  obtenerRivalName(container) {
+    const currentState = this.getState();
+    console.log("obtener rivalname");
+    // PREGUNTO CUANTOS PLAYERS HAY EN MI ROOM
+    fetch(url + "/cuantos-players/" + currentState.rtdbRoomId)
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        console.log("ESTA ROOM TIENE", data, "PARTICIPANTES");
+        // SI HAY UNO NO HAGO NADA
+        if (data == 1) {
+          container.goTo("/instructions");
+        } else if (data == 2) {
+          fetch(url + "/info-room/" + currentState.rtdbRoomId)
+            .then((res) => {
+              return res.json();
+            })
+            .then((data) => {
+              const users: string[] = [];
+              for (var key in data) {
+                console.log(key, typeof key);
+                users.push(key);
+              }
+              console.log(users);
+              if (users[0] == currentState.userName) {
+                currentState.rivalName = users[1];
+              } else if (users[1] == currentState.userName) {
+                currentState.rivalName = users[0];
+              }
+              state.setState(currentState);
+              container.goTo("/instructions");
+            });
+        }
+      });
+    // SI HAY DOS, GUARDO EL OTRO NOMBRE EN RIVALNAME
+  },
+
   setStatus(params, status: string, route: string) {
     const currentState = this.getState();
     currentState.myStatus = status;
@@ -229,6 +268,19 @@ export const state = {
 
     params.goTo(route);
   },
+  // escucharCambios() {
+  //   const currentState = this.getState();
+  //   const rtdbRoomId = currentState.rtdbRoomId;
+  //   const roomRef = rtdb.ref("/rooms/" + rtdbRoomId + "/players");
+  //   roomRef.on("value", (snap) => {
+  //     console.log("valor de rtdb", snap.val());
+  //   });
+
+  //   //   const messagesList = map(messagesFromServer);
+  //   //   currentState.messages = messagesList;
+  //   //   this.setState(currentState);
+  //   // });
+  // },
 
   move(myPlay) {},
   //   const currentState = this.getState();

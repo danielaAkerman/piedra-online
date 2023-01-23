@@ -1,6 +1,8 @@
 import { state } from "../../state";
 
 export function initPageRoomUp(container) {
+  // LO PRIMERO ES ENGANCHARME A ESTA ROOM PARA ESCUCHAR SUS CAMBIOS
+  // state.escucharCambios()
   const roomId = state.getState().roomId;
 
   const div = document.createElement("div");
@@ -14,7 +16,8 @@ export function initPageRoomUp(container) {
   const button = div.querySelector(".button") as HTMLElement;
 
   button.addEventListener("click", () => {
-    container.goTo("/instructions");
+    state.obtenerRivalName(container);
+    // container.goTo("/instructions");
   });
 
   const style = document.createElement("style");

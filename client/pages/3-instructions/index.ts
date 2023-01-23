@@ -1,7 +1,10 @@
 import { state } from "../../state";
 
 export function initPageInstructions(params) {
+  // state.escucharCambios()
   const currentState = state.getState()
+
+  
   const div = document.createElement("div");
   div.innerHTML = `
     <h1 class="titulo">INSTRUCCIONES</h1>
