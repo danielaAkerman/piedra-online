@@ -46,17 +46,16 @@ app.post("/rooms", (req, res) => {
     .then((doc) => {
       if (doc.exists) {
         const roomLongId = uuidv4();
-        const roomRef = rtdb.ref("rooms/" + roomLongId);
+        const roomRef = rtdb.ref(
+          "rooms/" + roomLongId + "/players/" + userName
+        );
         roomRef
           .set({
-            players: [
-              {
-                userId,
-                userName,
-                score: 0,
-                chose: "",
-              },
-            ],
+            userId,
+            userName,
+            score: 0,
+            chose: "",
+            status: "busy",
           })
           .then((rtdbRes) => {
             const roomId = 1000 + Math.trunc(Math.random() * 999);
@@ -107,7 +106,7 @@ app.get("/cuantos-players/:rtdbRoomId", function (req, res) {
 
   const playersRef = rtdb.ref("/rooms/" + rtdbRoomId + "/players");
   playersRef.get().then((resp) => {
-    res.json(resp.numChildren()); 
+    res.json(resp.numChildren());
   });
 });
 
@@ -116,7 +115,7 @@ app.get("/info-room/:rtdbRoomId", function (req, res) {
 
   const playersRef = rtdb.ref("/rooms/" + rtdbRoomId + "/players");
   playersRef.get().then((resp) => {
-    res.json(resp); 
+    res.json(resp.val());
   });
 });
 
@@ -124,18 +123,34 @@ app.post("/agregar-player/:rtdbRoomId", function (req, res) {
   const { userId } = req.body;
   const { userName } = req.body;
   const { rtdbRoomId } = req.params;
-  const playersRef = (rtdb.ref("/rooms/" + rtdbRoomId + "/players/1"));
+  const playersRef = rtdb.ref("/rooms/" + rtdbRoomId + "/players/" + userName);
   playersRef.set(
     {
       userId,
       userName,
       score: 0,
       chose: "",
+      status: "busy",
     },
     function () {
       res.json("ok");
     }
   );
+});
+
+app.patch("/status", function (req, res) {
+  const { status } = req.body;
+  const { userName } = req.body;
+  const { rtdbRoomId } = req.body;
+  const userRef = rtdb.ref("/rooms/" + rtdbRoomId + "/players/" + userName);
+
+  userRef
+    .update({
+      status,
+    })
+    .then((snap) => {
+      res.json({ message: `El status se ha actualizado: ${status}` });
+    });
 });
 
 app.use(express.static("./dist"));

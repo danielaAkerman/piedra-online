@@ -9,7 +9,7 @@ export const state = {
     resultadoParcial: "",
     rivalName: "",
     rivalId: "",
-    ready: false,
+    myStatus: "busy",
     oponentStatus: "",
     myScore: "",
     rivalScore: "",
@@ -132,21 +132,24 @@ export const state = {
                     return res.json();
                   })
                   .then((data) => {
-                    if (data[0].userName == currentState.userName) {
+                    if (data[currentState.userName]) {
                       // SI SOY NO PASA NADA
-                      console.log(
-                        "Esta room tiene un solo player y sos vos:",
-                        data[0].userName
-                      );
-                    } else if (data[0].userName != currentState.userName) {
+                      console.log("Esta room tiene un solo player y sos vos:");
+                    } else {
                       // SI NO SOY YO, ME VOY A AGREGAR COMO SEGUNDA PLAYER
+                      // OBTENGO RIVALNAME
+                      for (var key in data) {
+                        currentState.rivalName = key;
+                      }
+                      state.setState(currentState);
+
                       console.log(
                         "Esta room tiene un solo player y NO sos vos, tu rival es:",
-                        data[0].userName,
+                        currentState.rivalName,
                         "Te agregas como 2do player"
                       );
-                      currentState.rivalName = data[0].userName;
-                      state.setState(currentState)
+
+                      state.setState(currentState);
                       fetch(
                         url + "/agregar-player/" + currentState.rtdbRoomId,
                         {
@@ -179,35 +182,26 @@ export const state = {
                     return res.json();
                   })
                   .then((resp) => {
-                    console.log(resp);
-                    if (
-                      resp[0].userName == currentState.userName ||
-                      resp[1].userName == currentState.userName
-                    ) {
+                    if (resp[currentState.userName]) {
                       console.log("Uno de los players sos vos");
                       // PARA AGREGAR EL NOMBRE DEL RIVAL EN MI STATE:
-                      if(resp[0].userName == currentState.userName){
-                        currentState.rivalName = resp[1].userName
-                      } else if(resp[1].userName == currentState.userName){
-                        currentState.rivalName = resp[0].userName
-                      }
-                      state.setState(currentState)
+                      // if (resp[0].userName == currentState.userName) {
+                      //   currentState.rivalName = resp[1].userName;
+                      // } else if (resp[1].userName == currentState.userName) {
+                      //   currentState.rivalName = resp[0].userName;
+                      // }
+                      state.setState(currentState);
                       params.goTo("/instructions");
                       // SI COINCIDE MI NOMBRE, ESTÁ TODO BIEN PORQUE YA SOY PLAYER, REDIRECT TO instructions
-                    } else if (
-                      resp[0].userName != currentState.userName ||
-                      resp[1].userName != currentState.userName
-                      ) {
-                        console.log(
-                          "No podes ingresar a esta sala porque ya tiene dos participantes y vos no sos uno de ellos"
-                          );
-                          params.goTo("/sala-llena");
+                    } else {
+                      console.log(
+                        "No podes ingresar a esta sala porque ya tiene dos participantes y vos no sos uno de ellos"
+                      );
+                      params.goTo("/sala-llena");
                     }
                   });
               }
             });
-
-          // SI MI NOMBRE NO COINCIDE, ESTOY INTENTANDO ENTRAR EN UNA SALA LLENA, REDIRECT TO sala-llena
         }
       });
   },
@@ -216,6 +210,22 @@ export const state = {
     const currentState = this.getState();
     currentState.myStatus = status;
     state.setState(currentState);
+
+    fetch(url + "/status", {
+      method: "PATCH",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        status,
+        userName: currentState.userName,
+        rtdbRoomId: currentState.rtdbRoomId,
+      }),
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        console.log(data);
+      });
 
     params.goTo(route);
   },

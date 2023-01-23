@@ -16,8 +16,8 @@ export function initPageInstructions(params) {
     
       button.addEventListener("click", () => {
         // LISTO PARA JUGAR
-        state.setStatus(params, 'ok', "/game")
-        // params.goTo("/game");
+        state.setStatus(params, 'ok', "/waiting-for")
+        // params.goTo("/waiting-for");
       });
 
   const style = document.createElement("style");
