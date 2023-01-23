@@ -7,9 +7,9 @@ import "./components/countdown"
 import "./components/score-bar"
 
 (function () {
-  if (localStorage["game-state"]) {
-    state.init();
-  }
+  // if (localStorage["game-state"]) {
+  //   state.init();
+  // }
   // localStorage.clear()
 
   const root = document.querySelector(".root") as HTMLElement;
