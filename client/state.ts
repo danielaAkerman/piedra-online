@@ -186,11 +186,17 @@ export const state = {
                     if (resp[currentState.userName]) {
                       console.log("Uno de los players sos vos");
                       // PARA AGREGAR EL NOMBRE DEL RIVAL EN MI STATE:
-                      // if (resp[0].userName == currentState.userName) {
-                      //   currentState.rivalName = resp[1].userName;
-                      // } else if (resp[1].userName == currentState.userName) {
-                      //   currentState.rivalName = resp[0].userName;
-                      // }
+                      const users: string[] = [];
+                      for (var key in resp) {
+                        console.log(key, typeof key);
+                        users.push(key);
+                      }
+                      console.log(users);
+                      if (users[0] == currentState.userName) {
+                        currentState.rivalName = users[1];
+                      } else if (users[1] == currentState.userName) {
+                        currentState.rivalName = users[0];
+                      }
                       state.setState(currentState);
                       params.goTo("/instructions");
                       // SI COINCIDE MI NOMBRE, ESTÁ TODO BIEN PORQUE YA SOY PLAYER, REDIRECT TO instructions
@@ -271,16 +277,16 @@ export const state = {
   escucharCambioRival() {
     const currentState = this.getState();
     const rtdbRoomId = currentState.rtdbRoomId;
-    const roomRef = rtdb.ref("/rooms/" + "hola" );
+    const roomRef = rtdb.ref("/rooms/" + rtdbRoomId + "/players");
     roomRef.on("value", (snap) => {
-      const valor = snap.val()
-      console.log("valor de rtdb", JSON.stringify(valor));
+      const valor = snap.val();
+      console.log("valor de rtdb", valor);
     });
 
-  //   //   const messagesList = map(messagesFromServer);
-  //   //   currentState.messages = messagesList;
-  //   //   this.setState(currentState);
-  //   // });
+    //   //   const messagesList = map(messagesFromServer);
+    //   //   currentState.messages = messagesList;
+    //   //   this.setState(currentState);
+    //   // });
   },
 
   move(myPlay) {},
