@@ -1,9 +1,9 @@
 import { state } from "../../state";
 
-export function initPageRoomIn(params) {
+export function initPageRoomIn(root) {
   const currentState = state.getState();
   if (currentState.userName == ""){
-    params.goTo("/")
+    root.goTo("/")
   }
 
   const div = document.createElement("div");
@@ -24,9 +24,9 @@ export function initPageRoomIn(params) {
     const roomId = input.shadowRoot!.querySelector("input")!.value;
     currentState.roomId = roomId;
     state.setState(currentState);
-    state.entrarSala(roomId, params);
+    state.getInRoom(roomId, root);
 
-    // params.goTo("/instructions");
+    // root.goTo("/instructions");
   });
 
   const style = document.createElement("style");

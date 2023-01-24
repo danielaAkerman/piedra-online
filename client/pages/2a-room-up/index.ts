@@ -1,9 +1,9 @@
 import { state } from "../../state";
 
-export function initPageRoomUp(container) {
+export function initPageRoomUp(root) {
   const currentState = state.getState()
   if (currentState.userName == ""){
-    container.goTo("/")
+    root.goTo("/")
   }
   
   const roomId = state.getState().roomId;
@@ -19,8 +19,8 @@ export function initPageRoomUp(container) {
   const button = div.querySelector(".button") as HTMLElement;
 
   button.addEventListener("click", () => {
-    state.obtenerRivalName(container);
-    // container.goTo("/instructions");
+    state.getPlayersName(root);
+    // root.goTo("/instructions");
   });
 
   const style = document.createElement("style");

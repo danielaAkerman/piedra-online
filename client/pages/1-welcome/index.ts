@@ -1,6 +1,6 @@
 import { state } from "../../state";
 
-export function initPageWelcome(params) {
+export function initPageWelcome(root) {
   const div = document.createElement("div");
   div.innerHTML = `
   <h1 class="titulo">PIEDRA<br>PAPEL O<br>TIJERA</h1>
@@ -24,8 +24,8 @@ export function initPageWelcome(params) {
       .value.toUpperCase();
     currentState.userName = userName;
     state.setState(currentState);
-    state.setUserName("room-up", params);
-    // params.goTo("/room-up");
+    state.setUserName("room-up", root);
+
   });
 
   buttonIngresar.addEventListener("click", () => {
@@ -34,8 +34,8 @@ export function initPageWelcome(params) {
       .value.toUpperCase();
     currentState.userName = userName;
     state.setState(currentState);
-    state.setUserName("room-in", params);
-    params.goTo("/room-in");
+    state.setUserName("room-in", root);
+    root.goTo("/room-in");
   });
 
   const style = document.createElement("style");
