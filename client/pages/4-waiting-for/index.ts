@@ -1,6 +1,7 @@
 import { state } from "../../state";
 
 export function initPageWaiting(params) {
+  state.escucharCambioRival()
   const rivalName = state.getState().rivalName || "TU OPONENTE";
   const div = document.createElement("div");
   div.classList.add("container");

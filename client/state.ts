@@ -268,19 +268,20 @@ export const state = {
 
     params.goTo(route);
   },
-  // escucharCambios() {
-  //   const currentState = this.getState();
-  //   const rtdbRoomId = currentState.rtdbRoomId;
-  //   const roomRef = rtdb.ref("/rooms/" + rtdbRoomId + "/players");
-  //   roomRef.on("value", (snap) => {
-  //     console.log("valor de rtdb", snap.val());
-  //   });
+  escucharCambioRival() {
+    const currentState = this.getState();
+    const rtdbRoomId = currentState.rtdbRoomId;
+    const roomRef = rtdb.ref("/rooms/" + "hola" );
+    roomRef.on("value", (snap) => {
+      const valor = snap.val()
+      console.log("valor de rtdb", JSON.stringify(valor));
+    });
 
   //   //   const messagesList = map(messagesFromServer);
   //   //   currentState.messages = messagesList;
   //   //   this.setState(currentState);
   //   // });
-  // },
+  },
 
   move(myPlay) {},
   //   const currentState = this.getState();

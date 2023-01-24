@@ -1,9 +1,9 @@
 import firebase from "firebase";
 
 const app = firebase.initializeApp({
-  apiKey: "BkyrkL6sIKSW2bw5lqhcfC2ecmjUCA6ssTGq07CN",
-  authDomain: "chat-app44-dc0bd.firebaseapp.com",
-  databaseURL: "https://chat-app44-dc0bd-default-rtdb.firebaseio.com",
+  apiKey: "XEJLGi5IIeRTo3FufrvU2MyhOc7ko87P06BSh2vl",
+  authDomain: "piedra-d355.firebaseapp.com",
+  databaseURL: "https://piedra-d355-default-rtdb.firebaseio.com/",
 });
 
 const rtdb = firebase.database();
