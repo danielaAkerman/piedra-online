@@ -3,10 +3,10 @@ const piedra = require("../../img/piedra.png");
 const papel = require("../../img/papel.png");
 const tijera = require("../../img/tijera.png");
 
-export function initPageGame(container) {
+export function initPageGame(root) {
   const currentState = state.getState();
   if (currentState.userName == "") {
-    container.goTo("/");
+    root.goTo("/");
   }
 
   let mySelection: string = "none";
@@ -71,7 +71,7 @@ export function initPageGame(container) {
         counterB--;
         if (counterB < 0) {
           clearInterval(intervalIdB);
-          state.setStatus(container, "busy", "/score");
+          state.setMyStatus(root, "busy", "/score");
         }
       }, 1000);
     }

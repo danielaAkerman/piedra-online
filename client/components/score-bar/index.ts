@@ -9,14 +9,14 @@ customElements.define(
       this.render();
     }
     render() {
-      const roomId= state.getState().roomId
-      const userName= state.getState().userName
-      const rivalName= state.getState().rivalName
-      const myScore= state.getState().myScore || 0;
-      const rivalScore= state.getState().rivalScore || 0;
+      const roomId = state.getState().roomId;
+      const userName = state.getState().userName;
+      const rivalName = state.getState().rivalName;
+      const myScore = state.getState().myScore || 0;
+      const rivalScore = state.getState().rivalScore || 0;
 
       const div = document.createElement("div");
-      div.classList.add("container")
+      div.classList.add("container");
 
       div.innerHTML = `
 
@@ -49,8 +49,8 @@ customElements.define(
 
             `;
 
-            this.shadow.appendChild(div);
-            this.shadow.appendChild(style);
+      this.shadow.appendChild(div);
+      this.shadow.appendChild(style);
     }
   }
 );

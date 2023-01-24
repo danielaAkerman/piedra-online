@@ -18,11 +18,8 @@ export function initPageInstructions(params) {
     `;
 
   const button = div.querySelector(".button") as HTMLElement;
-
   button.addEventListener("click", () => {
-    // LISTO PARA JUGAR
-    state.setStatus(params, "ok", "/waiting-for");
-    // params.goTo("/waiting-for");
+    state.setMyStatus(params, "ok", "/waiting-for");
   });
 
   const style = document.createElement("style");

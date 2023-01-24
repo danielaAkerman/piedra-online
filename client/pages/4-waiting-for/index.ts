@@ -6,7 +6,10 @@ export function initPageWaiting(root) {
     root.goTo("/");
   }
   // state.getPlayersName(root)
-  state.escucharCambioRival(root);
+  // state.escucharCambioRival(root);
+  if(currentState.userStatus == "ok" && currentState.rivalStatus == "ok"){
+    root.goTo("/game")
+  }
   const rivalName = state.getState().rivalName || "TU OPONENTE";
   const div = document.createElement("div");
   div.classList.add("container");
