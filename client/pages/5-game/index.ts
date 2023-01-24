@@ -1,7 +1,7 @@
 import { state } from "../../state";
 const piedra = require("../../img/piedra.png");
 const papel = require("../../img/papel.png");
-const tijeras = require("../../img/tijera.png");
+const tijera = require("../../img/tijera.png");
 
 export function initPageGame(container) {
   const currentState = state.getState();
@@ -9,14 +9,7 @@ export function initPageGame(container) {
     container.goTo("/");
   }
 
-  let counter = 3;
-  const intervalId = setInterval(() => {
-    counter--;
-    if (counter < 0) {
-      clearInterval(intervalId);
-      // state.setStatus(container, "busy", "/score");
-    }
-  }, 1000);
+  let mySelection: string = "none";
 
   const div = document.createElement("div");
   div.innerHTML = `
@@ -29,33 +22,49 @@ export function initPageGame(container) {
       <div class="one-hand" type="papel">
       <img class="hand-img papel" src=${papel}></div>
       <br>
-      <div class="one-hand" type="tijeras">
-      <img class="hand-img tijeras" src=${tijeras}></div>
+      <div class="one-hand" type="tijera">
+      <img class="hand-img tijera" src=${tijera}></div>
       <br>
     </div>
   
   `;
+
   const hands = div.querySelector(".hands-container")!.children;
   for (const h of hands) {
     h.addEventListener("click", (e: any) => {
+      mySelection = h.getAttribute("type")!.toString();
+      h.classList.add("selected")
+    });
+  }
+
+  const opciones = [piedra, papel, tijera];
+
+  let counter = 3;
+  const intervalId = setInterval(() => {
+    counter--;
+    if (counter < 0) {
       clearInterval(intervalId);
-      const mySelection = h.getAttribute("type");
       state.move(mySelection);
 
-      const oponentSelection = false;
-      const opciones = [piedra, papel, tijeras];
-
       div.innerHTML = `
+    <div class="container">
+      <div class="hand-selected-container">
+        <img 
+        class="hand-selected" 
+        style="transform: rotate(180deg); height: 200px;" 
+        src=${opciones.find((o) => o.includes(piedra))}>
+      </div>
 
-          <img class="hand-selected" style="transform: rotate(180deg); height: 40%; display: block; margin: 0 auto" src=${opciones.find(
-            (o) => o.includes(oponentSelection)
-          )}></div>
-          <div style="height: 20%">
-          </div>
-          <img class="hand-selected" style="height: 40%; display: block; margin: 0 auto" src=${opciones.find(
-            (o) => o.includes(mySelection)
-          )}></div>
-      `;
+      <div style="height: 100px;"></div>
+
+      <div class="hand-selected-container">
+        <img 
+        class="hand-selected"
+        style= "height: 200px;"
+        src=${opciones.find((o) => o.includes(mySelection))}>
+      <div>
+    </div>
+              `;
 
       let counterB = 1;
       const intervalIdB = setInterval(() => {
@@ -63,11 +72,10 @@ export function initPageGame(container) {
         if (counterB < 0) {
           clearInterval(intervalIdB);
           state.setStatus(container, "busy", "/score");
-          // container.goTo("/score");
         }
       }, 1000);
-    });
-  }
+    }
+  }, 1000);
 
   div.classList.add("container");
 
@@ -85,8 +93,8 @@ export function initPageGame(container) {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    bottom: -10px;
     position: relative;
+    bottom: -10px;
   }
   .counter, countdown-comp{
     flex-grow: 1;
@@ -108,6 +116,9 @@ export function initPageGame(container) {
     align-item: center;
     justify-content: center;
     cursor: pointer;
+  }
+  .selected{
+    box-shadow: 0 0 24px #5e5beb;
   }
   `;
   div.appendChild(style);

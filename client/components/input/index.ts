@@ -16,7 +16,7 @@ customElements.define(
 
       div.innerHTML = `
 <label class="inp" for="inp">
-  <input placeholder="${label}" id="inp" type=${type} name=${name}>
+  <input placeholder="${label}" id="inp" type=${type} name=${name} autofocus>
 </label>
 
       `;
