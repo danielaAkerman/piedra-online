@@ -274,13 +274,16 @@ export const state = {
 
     params.goTo(route);
   },
-  escucharCambioRival() {
+  escucharCambioRival(params) {
     const currentState = this.getState();
     const rtdbRoomId = currentState.rtdbRoomId;
     const roomRef = rtdb.ref("/rooms/" + rtdbRoomId + "/players");
     roomRef.on("value", (snap) => {
       const valor = snap.val();
-      console.log("valor de rtdb", valor);
+      currentState.rivalStatus = valor[currentState.rivalName].status;
+      if (currentState.rivalStatus == "ok") {
+        params.goTo("/game");
+      }
     });
 
     //   //   const messagesList = map(messagesFromServer);

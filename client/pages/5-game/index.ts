@@ -4,13 +4,17 @@ const papel = require("../../img/papel.png");
 const tijeras = require("../../img/tijera.png");
 
 export function initPageGame(container) {
+  const currentState = state.getState();
+  if (currentState.userName == "") {
+    container.goTo("/");
+  }
+
   let counter = 3;
   const intervalId = setInterval(() => {
     counter--;
     if (counter < 0) {
       clearInterval(intervalId);
-      state.setStatus(container, "busy", "/score")
-
+      // state.setStatus(container, "busy", "/score");
     }
   }, 1000);
 
@@ -37,8 +41,8 @@ export function initPageGame(container) {
       clearInterval(intervalId);
       const mySelection = h.getAttribute("type");
       state.move(mySelection);
-      
-      const oponentSelection = false
+
+      const oponentSelection = false;
       const opciones = [piedra, papel, tijeras];
 
       div.innerHTML = `
@@ -48,8 +52,8 @@ export function initPageGame(container) {
           )}></div>
           <div style="height: 20%">
           </div>
-          <img class="hand-selected" style="height: 40%; display: block; margin: 0 auto" src=${opciones.find((o) =>
-            o.includes(mySelection)
+          <img class="hand-selected" style="height: 40%; display: block; margin: 0 auto" src=${opciones.find(
+            (o) => o.includes(mySelection)
           )}></div>
       `;
 
@@ -58,7 +62,8 @@ export function initPageGame(container) {
         counterB--;
         if (counterB < 0) {
           clearInterval(intervalIdB);
-          container.goTo("/score");
+          state.setStatus(container, "busy", "/score");
+          // container.goTo("/score");
         }
       }, 1000);
     });

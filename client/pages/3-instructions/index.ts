@@ -2,9 +2,11 @@ import { state } from "../../state";
 
 export function initPageInstructions(params) {
   // state.escucharCambios()
-  const currentState = state.getState()
+  const currentState = state.getState();
+  if (currentState.userName == "") {
+    params.goTo("/");
+  }
 
-  
   const div = document.createElement("div");
   div.innerHTML = `
     <h1 class="titulo">INSTRUCCIONES</h1>
@@ -14,14 +16,14 @@ export function initPageInstructions(params) {
     <br>
     <button-comp class="button">JUGAR AHORA</button-comp>
     `;
-    
-      const button = div.querySelector(".button") as HTMLElement;
-    
-      button.addEventListener("click", () => {
-        // LISTO PARA JUGAR
-        state.setStatus(params, 'ok', "/waiting-for")
-        // params.goTo("/waiting-for");
-      });
+
+  const button = div.querySelector(".button") as HTMLElement;
+
+  button.addEventListener("click", () => {
+    // LISTO PARA JUGAR
+    state.setStatus(params, "ok", "/waiting-for");
+    // params.goTo("/waiting-for");
+  });
 
   const style = document.createElement("style");
   style.textContent = `

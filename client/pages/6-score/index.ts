@@ -1,8 +1,13 @@
 import { state } from "../../state";
 
 export function initPageScore(container) {
-  const myName = (state.getState().userName).toUpperCase();
-  const rivalName = (state.getState().rivalName || "compu").toUpperCase() ;
+  const currentState = state.getState();
+  if (currentState.userName == "") {
+    container.goTo("/");
+  }
+
+  const myName = state.getState().userName.toUpperCase();
+  const rivalName = (state.getState().rivalName || "compu").toUpperCase();
   const myScore = state.getState().historyScore.myPlay;
   const pcScore = state.getState().historyScore.pcPlay;
   const div = document.createElement("div");
@@ -33,7 +38,8 @@ export function initPageScore(container) {
   div.appendChild(style);
   const button = div.querySelector(".button") as HTMLElement;
   button.addEventListener("click", () => {
-    container.goTo("/game");
+    state.setStatus(container, "ok", "/waiting-for");
+    // container.goTo("/waiting-for");
   });
   return div;
 }

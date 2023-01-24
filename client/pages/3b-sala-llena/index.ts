@@ -1,8 +1,11 @@
 import { state } from "../../state";
 
 export function initPageSalaLlena(params) {
-  const currentState = state.getState()
-  const roomId = currentState.roomId
+  const currentState = state.getState();
+  if (currentState.userName == "") {
+    params.goTo("/");
+  }
+  const roomId = currentState.roomId;
   const div = document.createElement("div");
   div.innerHTML = `
     <h1 class="titulo">SALA LLENA</h1>
@@ -12,13 +15,12 @@ export function initPageSalaLlena(params) {
     <br>
     <button-comp class="button">VOLVER AL INICIO</button-comp>
     `;
-    
-      const button = div.querySelector(".button") as HTMLElement;
-    
-      button.addEventListener("click", () => {
 
-        params.goTo("/");
-      });
+  const button = div.querySelector(".button") as HTMLElement;
+
+  button.addEventListener("click", () => {
+    params.goTo("/");
+  });
 
   const style = document.createElement("style");
   style.textContent = `

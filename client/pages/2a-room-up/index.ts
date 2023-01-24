@@ -1,8 +1,11 @@
 import { state } from "../../state";
 
 export function initPageRoomUp(container) {
-  // LO PRIMERO ES ENGANCHARME A ESTA ROOM PARA ESCUCHAR SUS CAMBIOS
-  // state.escucharCambios()
+  const currentState = state.getState()
+  if (currentState.userName == ""){
+    container.goTo("/")
+  }
+  
   const roomId = state.getState().roomId;
 
   const div = document.createElement("div");

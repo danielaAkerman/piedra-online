@@ -2,6 +2,10 @@ import { state } from "../../state";
 
 export function initPageRoomIn(params) {
   const currentState = state.getState();
+  if (currentState.userName == ""){
+    params.goTo("/")
+  }
+
   const div = document.createElement("div");
   div.innerHTML = `
   <p class="titulo">HOLA ${state.getState().userName.toUpperCase()}</p>

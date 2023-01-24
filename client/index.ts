@@ -12,6 +12,7 @@ import "./components/score-bar"
   // }
   // localStorage.clear()
 
+
   const root = document.querySelector(".root") as HTMLElement;
   initRouter(root);
 })();
