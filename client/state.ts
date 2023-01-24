@@ -9,10 +9,12 @@ export const state = {
     rivalName: "",
     userId: "",
     rivalId: "",
-    myStatus: "busy",
-    rivalStatus: "",
-    myScore: "",
+    userStatus: "busy",
+    rivalStatus: "busy",
+    userScore: "",
     rivalScore: "",
+    userChoise: "",
+    rivalChoise: "",
     currentGame: {
       myPlay: "",
       rivalPlay: "",
@@ -89,7 +91,7 @@ export const state = {
           currentState.roomId = data.id;
           currentState.rtdbRoomId = data.rtdbRoomId;
           this.setState(currentState);
-          
+
           // this.init();
           root.goTo("/room-up");
         });
@@ -235,13 +237,13 @@ export const state = {
             userId: currentState.userId,
             userName: currentState.userName,
             score: 0,
-            chose: "",
+            chose: "none",
             status: "busy",
           });
           root.goTo("/instructions");
         }
       } else if (users.length == 2) {
-        console.log("rtdb somos doos")
+        console.log("rtdb somos doos");
         if (users.includes(currentState.userName)) {
           console.log("RTDB somos 2 y soy player");
           if (users[0] == currentState.userName) {
@@ -249,6 +251,11 @@ export const state = {
           } else if (users[1] == currentState.userName) {
             currentState.rivalName = users[0];
           }
+          currentState.rivalStatus = snap.val()[currentState.rivalName].status;
+          currentState.rivalId = snap.val()[currentState.rivalName].userId;
+          currentState.rivalChoise = snap.val()[currentState.rivalName].chose;
+          currentState.rivalScore = snap.val()[currentState.rivalName].score;
+
           state.setState(currentState);
           root.goTo("/instructions");
         } else {
@@ -299,7 +306,7 @@ export const state = {
 
   setStatus(root, status: string, route: string) {
     const currentState = this.getState();
-    currentState.myStatus = status;
+    currentState.userStatus = status;
     state.setState(currentState);
 
     fetch(url + "/status", {

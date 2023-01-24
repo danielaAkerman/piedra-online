@@ -1,12 +1,12 @@
 import { state } from "../../state";
 
-export function initPageWaiting(params) {
+export function initPageWaiting(root) {
   const currentState = state.getState();
   if (currentState.userName == "") {
-    params.goTo("/");
+    root.goTo("/");
   }
-  
-  state.escucharCambioRival(params);
+  // state.getPlayersName(root)
+  state.escucharCambioRival(root);
   const rivalName = state.getState().rivalName || "TU OPONENTE";
   const div = document.createElement("div");
   div.classList.add("container");

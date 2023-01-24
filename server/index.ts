@@ -54,7 +54,7 @@ app.post("/rooms", (req, res) => {
             userId,
             userName,
             score: 0,
-            chose: "",
+            chose: "none",
             status: "busy",
           })
           .then((rtdbRes) => {
@@ -129,7 +129,7 @@ app.post("/agregar-player/:rtdbRoomId", function (req, res) {
       userId,
       userName,
       score: 0,
-      chose: "",
+      chose: "none",
       status: "busy",
     },
     function () {
