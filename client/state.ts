@@ -5,16 +5,16 @@ export const state = {
   data: {
     roomId: "",
     rtdbRoomId: "",
-    userName: "Vos",
-    rivalName: "Tu oponente",
+    userName: "",
+    rivalName: "TU OPONENTE",
     userId: "",
     rivalId: "",
     userStatus: "busy",
     rivalStatus: "busy",
     userScore: 0,
-    rivalScore: "",
+    rivalScore: 0,
     userChoise: "none",
-    rivalChoise: "",
+    rivalChoise: "none",
   },
   listeners: [],
 
@@ -178,22 +178,33 @@ export const state = {
     root.goTo(route);
   },
 
-  escucharCambioRival(root) {
+  // escucharCambioRival(root) {
+  //   const currentState = this.getState();
+  //   const rtdbRoomId = currentState.rtdbRoomId;
+  //   const roomRef = rtdb.ref("/rooms/" + rtdbRoomId + "/players");
+  //   roomRef.on("value", (snap) => {
+  //     const valor = snap.val();
+  //     currentState.rivalStatus = valor[currentState.rivalName].status;
+  //     if (currentState.rivalStatus == "ok") {
+  //       root.goTo("/game");
+  //     }
+  //   });
+  // },
+
+  listenStatus(root) {
     const currentState = this.getState();
+    if (currentState.rivalStatus == "ok") {
+      root.goTo("/game");
+    }
     const rtdbRoomId = currentState.rtdbRoomId;
     const roomRef = rtdb.ref("/rooms/" + rtdbRoomId + "/players");
     roomRef.on("value", (snap) => {
       const valor = snap.val();
-      currentState.rivalStatus = valor[currentState.rivalName].status;
-      if (currentState.rivalStatus == "ok") {
+      var rivalStatus = valor[currentState.rivalName].status;
+      if (rivalStatus == "ok") {
         root.goTo("/game");
       }
     });
-
-    //   //   const messagesList = map(messagesFromServer);
-    //   //   currentState.messages = messagesList;
-    //   //   this.setState(currentState);
-    //   // });
   },
 
   move(myPlay) {},

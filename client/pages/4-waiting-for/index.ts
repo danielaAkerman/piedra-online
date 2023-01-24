@@ -7,9 +7,8 @@ export function initPageWaiting(root) {
   }
   // state.getPlayersName(root)
   // state.escucharCambioRival(root);
-  if(currentState.userStatus == "ok" && currentState.rivalStatus == "ok"){
-    root.goTo("/game")
-  }
+
+  state.listenStatus(root)
   const rivalName = state.getState().rivalName || "TU OPONENTE";
   const div = document.createElement("div");
   div.classList.add("container");
