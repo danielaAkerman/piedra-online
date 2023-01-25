@@ -198,7 +198,7 @@ export const state = {
             currentState.rivalStatus == "ok" &&
             currentState.userStatus == "ok"
           ) {
-            rivalRoomRef.off("value")
+            rivalRoomRef.off("value");
             root.goTo("/game");
           } else if (
             currentState.rivalStatus == "busy" &&
@@ -220,7 +220,7 @@ export const state = {
             users.push(key.toString());
           }
           if (users.length == 2) {
-            roomRef.off("value")
+            roomRef.off("value");
             console.log("Se sumó tu oponente");
             this.setMyStatus(root, status);
           }
@@ -243,7 +243,6 @@ export const state = {
     userGameRef.update({
       chose: userChoise,
     });
-
   },
 
   getRivalGame() {
@@ -257,13 +256,19 @@ export const state = {
       currentState.rivalChoise = valor.chose;
       state.setState(currentState);
     });
-return currentState.rivalChoise
   },
 
   getWinner() {
     const currentState = this.getState();
     var myPlay = currentState.userChoise;
     var rivalPlay = currentState.rivalChoise;
+
+    console.log(
+      currentState.userName,
+      currentState.userChoise,
+      currentState.rivalName,
+      currentState.rivalChoise
+    );
 
     if (
       (myPlay == "piedra" && rivalPlay == "tijera") ||

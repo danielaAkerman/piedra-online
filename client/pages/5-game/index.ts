@@ -35,12 +35,12 @@ export function initPageGame(root) {
   for (const h of hands) {
     h.addEventListener("click", (e: any) => {
       mySelection = h.getAttribute("type")!.toString();
+      state.setMyGame(mySelection);
       h.classList.add("selected");
     });
   }
   
-  state.setMyGame(mySelection);
-  
+
   const opciones = [piedra, papel, tijera, ninguna];
 
   let counter = 3;
@@ -48,7 +48,8 @@ export function initPageGame(root) {
     counter--;
     if (counter < 0) {
       clearInterval(intervalId);
-      
+      state.getRivalGame()
+      const rivalChoise = currentState.rivalChoise
 
       div.innerHTML = `
     <div class="container">
@@ -56,7 +57,7 @@ export function initPageGame(root) {
         <img 
         class="hand-selected" 
         style="transform: rotate(180deg); height: 200px;" 
-        src=${opciones.find((o) => o.includes(state.getRivalGame()))}>
+        src=${opciones.find((o) => o.includes(rivalChoise))}>
       </div>
 
       <div style="height: 100px;"></div>
@@ -76,6 +77,7 @@ export function initPageGame(root) {
         if (counterB < 0) {
           clearInterval(intervalIdB);
           state.setMyStatus(root, "busy");
+          state.getWinner()
         }
       }, 1000);
     }
