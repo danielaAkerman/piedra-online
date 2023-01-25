@@ -7,8 +7,8 @@ export function initPageScore(root) {
   }
 
   const userName = state.getState().userName;
-  const rivalName = state.getState().rivalName;
   const userScore = state.getState().userScore;
+  const rivalName = state.getState().rivalName;
   const rivalScore = state.getState().rivalScore;
   const div = document.createElement("div");
 
@@ -39,11 +39,6 @@ export function initPageScore(root) {
   const button = div.querySelector(".button") as HTMLElement;
   button.addEventListener("click", () => {
     state.setMyStatus(root, "ok");
-    // if (currentState.rivalStatus == "ok") {
-    //   state.setMyStatus(root, "ok", "/game");
-    // } else {
-    //   state.setMyStatus(root, "ok", "/waiting-for");
-    // }
   });
   return div;
 }

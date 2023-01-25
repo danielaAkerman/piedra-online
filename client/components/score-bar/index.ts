@@ -12,7 +12,7 @@ customElements.define(
       const roomId = state.getState().roomId;
       const userName = state.getState().userName;
       const rivalName = state.getState().rivalName;
-      const myScore = state.getState().myScore || 0;
+      const myScore = state.getState().userScore || 0;
       const rivalScore = state.getState().rivalScore || 0;
 
       const div = document.createElement("div");

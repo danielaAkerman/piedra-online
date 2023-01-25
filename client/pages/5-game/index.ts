@@ -10,8 +10,6 @@ export function initPageGame(root) {
     root.goTo("/");
   }
 
-  let mySelection: string = "ninguna";
-
   const div = document.createElement("div");
 
   div.innerHTML = `
@@ -31,6 +29,8 @@ export function initPageGame(root) {
   
   `;
 
+  var mySelection = "ninguna";
+  state.setMyGame(mySelection);
   const hands = div.querySelector(".hands-container")!.children;
   for (const h of hands) {
     h.addEventListener("click", (e: any) => {
@@ -39,45 +39,51 @@ export function initPageGame(root) {
       h.classList.add("selected");
     });
   }
-  
 
   const opciones = [piedra, papel, tijera, ninguna];
 
   let counter = 3;
   const intervalId = setInterval(() => {
     counter--;
-    if (counter < 0) {
+    if (counter < 1) {
       clearInterval(intervalId);
-      state.getRivalGame()
-      const rivalChoise = currentState.rivalChoise
+      state.getRivalGame();
 
-      div.innerHTML = `
-    <div class="container">
-      <div class="hand-selected-container">
-        <img 
-        class="hand-selected" 
-        style="transform: rotate(180deg); height: 200px;" 
-        src=${opciones.find((o) => o.includes(rivalChoise))}>
-      </div>
+      let counterC = 1;
+      const intervalIdC = setInterval(() => {
+        counterC--;
+        if (counterC < 1) {
+          clearInterval(intervalIdC);
 
-      <div style="height: 100px;"></div>
+          div.innerHTML = `
+        <div class="container">
+          <div class="hand-selected-container">
+            <img 
+            class="hand-selected" 
+            style="transform: rotate(180deg); height: 200px;" 
+            src=${opciones.find((o) => o.includes(currentState.rivalChoise))}>
+          </div>
+    
+          <div style="height: 100px;"></div>
+    
+          <div class="hand-selected-container">
+            <img 
+            class="hand-selected"
+            style= "height: 200px;"
+            src=${opciones.find((o) => o.includes(mySelection))}>
+          <div>
+        </div>
+                  `;
 
-      <div class="hand-selected-container">
-        <img 
-        class="hand-selected"
-        style= "height: 200px;"
-        src=${opciones.find((o) => o.includes(mySelection))}>
-      <div>
-    </div>
-              `;
-
-      let counterB = 1;
-      const intervalIdB = setInterval(() => {
-        counterB--;
-        if (counterB < 0) {
-          clearInterval(intervalIdB);
-          state.setMyStatus(root, "busy");
-          state.getWinner()
+          let counterB = 1;
+          const intervalIdB = setInterval(() => {
+            counterB--;
+            if (counterB < 0) {
+              clearInterval(intervalIdB);
+              state.getWinner(root);
+              // state.setMyStatus(root, "busy");
+            }
+          }, 1000);
         }
       }, 1000);
     }

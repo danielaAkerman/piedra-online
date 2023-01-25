@@ -9,7 +9,8 @@ customElements.define(
       this.render();
     }
     render() {
-      const resultado = state.getState().resultadoParcial;
+      const currentState = state.getState()
+      const resultado = currentState.resultadoParcial;
       const div = document.createElement("div");
       div.innerHTML = `
 

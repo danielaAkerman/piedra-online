@@ -94,7 +94,7 @@ app.get("/rooms/:roomId", (req, res) => {
             res.json(snap.data());
           });
       } else {
-        res.status(401).json({
+        res.json({
           message: "Room not found",
         });
       }

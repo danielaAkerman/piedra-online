@@ -107,11 +107,12 @@ export const state = {
       })
       .then((data) => {
         if (data.message) {
-          console.error("Not found");
+          console.log("No existe la room solicitada");
         } else {
           currentState.rtdbRoomId = data.rtdbRoomId;
           this.setState(currentState);
           this.getPlayersName(root);
+          
         }
       });
   },
@@ -161,6 +162,7 @@ export const state = {
 
           state.setState(currentState);
           roomRef.off("value");
+          this.getRoomScore();
           root.goTo("/instructions");
         } else {
           root.goTo("/sala-llena");
@@ -179,7 +181,7 @@ export const state = {
     myUserRef.update({
       status,
     });
-
+    console.log("el status es", status);
     if (status == "ok") {
       if (currentState.rivalId) {
         const rivalRoomRef = rtdb.ref(
@@ -227,6 +229,7 @@ export const state = {
         });
       }
     } else if (status == "busy") {
+      console.log("al score", status);
       root.goTo("/score");
     }
   },
@@ -251,17 +254,15 @@ export const state = {
     const rivalGameRef = rtdb.ref(
       "/rooms/" + currentState.rtdbRoomId + "/players/" + currentState.rivalName
     );
-    rivalGameRef.once("value", (snap) => {
+    rivalGameRef.on("value", (snap) => {
       const valor = snap.val();
       currentState.rivalChoise = valor.chose;
       state.setState(currentState);
     });
   },
 
-  getWinner() {
+  getWinner(root) {
     const currentState = this.getState();
-    var myPlay = currentState.userChoise;
-    var rivalPlay = currentState.rivalChoise;
 
     console.log(
       currentState.userName,
@@ -269,6 +270,9 @@ export const state = {
       currentState.rivalName,
       currentState.rivalChoise
     );
+
+    var myPlay = currentState.userChoise;
+    var rivalPlay = currentState.rivalChoise;
 
     if (
       (myPlay == "piedra" && rivalPlay == "tijera") ||
@@ -289,6 +293,63 @@ export const state = {
       currentState.rivalScore++;
       currentState.resultadoParcial = "PERDISTE";
     }
+    console.log(currentState.resultadoParcial);
+
+    this.setState(currentState);
+    this.setRoomScore();
+    this.setMyStatus(root, "busy");
+  },
+
+  setRoomScore() {
+    const currentState = state.getState();
+    const myScoreRef = rtdb.ref(
+      "/rooms/" +
+        currentState.rtdbRoomId +
+        "/players/" +
+        currentState.userName +
+        "/score"
+    );
+    myScoreRef.set(currentState.userScore);
+
+    const userScoreRef = rtdb.ref(
+      "/rooms/" +
+        currentState.rtdbRoomId +
+        "/players/" +
+        currentState.rivalName +
+        "/score"
+    );
+    userScoreRef.set(currentState.rivalScore);
+  },
+
+  getRoomScore() {
+    const currentState = state.getState();
+    const myScoreRef = rtdb.ref(
+      "/rooms/" +
+        currentState.rtdbRoomId +
+        "/players/" +
+        currentState.userName +
+        "/score"
+    );
+
+    myScoreRef.get().then(resp =>{
+      currentState.userScore = resp.val()
+      console.log("my score", currentState.userScore)
+    })
+
+    const rivalScoreRef = rtdb.ref(
+      "/rooms/" +
+        currentState.rtdbRoomId +
+        "/players/" +
+        currentState.rivalName +
+        "/score"
+    );
+
+    rivalScoreRef.get().then(resp =>{
+      currentState.rivalScore = resp.val()
+      console.log("rival score", currentState.rivalScore)
+    })
+
     state.setState(currentState);
+
   },
 };

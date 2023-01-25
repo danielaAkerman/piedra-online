@@ -11,7 +11,7 @@ customElements.define(
       const intervalId = setInterval(() => {
         this.render(counter);
         counter--;
-        if (counter < 0) {
+        if (counter < 1) {
           clearInterval(intervalId);
         }
       }, 1000);
