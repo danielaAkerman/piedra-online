@@ -7,7 +7,6 @@ customElements.define(
     constructor() {
       super();
       this.render();
-      state.subscribe(()=>this.render())
     }
     render() {
       const resultado = state.getState().resultadoParcial;
