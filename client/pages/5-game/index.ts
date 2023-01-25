@@ -47,15 +47,22 @@ export function initPageGame(root) {
     counter--;
     if (counter < 1) {
       clearInterval(intervalId);
-      state.getRivalGame();
 
-      let counterC = 1;
-      const intervalIdC = setInterval(() => {
-        counterC--;
-        if (counterC < 1) {
-          clearInterval(intervalIdC);
+      let counterD = 1;
+      const intervalIdD = setInterval(() => {
+        counterD--;
+        if (counterD < 1) {
+          clearInterval(intervalIdD);
 
-          div.innerHTML = `
+          state.getRivalGame();
+
+          let counterC = 1;
+          const intervalIdC = setInterval(() => {
+            counterC--;
+            if (counterC < 1) {
+              clearInterval(intervalIdC);
+
+              div.innerHTML = `
         <div class="container">
           <div class="hand-selected-container">
             <img 
@@ -75,13 +82,15 @@ export function initPageGame(root) {
         </div>
                   `;
 
-          let counterB = 1;
-          const intervalIdB = setInterval(() => {
-            counterB--;
-            if (counterB < 0) {
-              clearInterval(intervalIdB);
-              state.getWinner(root);
-              // state.setMyStatus(root, "busy");
+              let counterB = 1;
+              const intervalIdB = setInterval(() => {
+                counterB--;
+                if (counterB < 0) {
+                  clearInterval(intervalIdB);
+                  state.getWinner(root);
+                  // state.setMyStatus(root, "busy");
+                }
+              }, 1000);
             }
           }, 1000);
         }

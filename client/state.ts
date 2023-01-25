@@ -107,7 +107,7 @@ export const state = {
       })
       .then((data) => {
         if (data.message) {
-          console.log("No existe la room solicitada");
+          console.log(data.message);
         } else {
           currentState.rtdbRoomId = data.rtdbRoomId;
           this.setState(currentState);

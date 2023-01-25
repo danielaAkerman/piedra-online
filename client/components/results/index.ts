@@ -51,7 +51,9 @@ customElements.define(
     margin: 0 auto;
   }
   .result{
-    color:black;
+    font-size: 42px;
+    text-align: center;
+    font-weight: lighter;
   }
   *::selection{
     background-color: #f4a261;
