@@ -2,6 +2,7 @@ import { state } from "../../state";
 const piedra = require("../../img/piedra.png");
 const papel = require("../../img/papel.png");
 const tijera = require("../../img/tijera.png");
+const ninguna = require("../../img/ninguna.png");
 
 export function initPageGame(root) {
   const currentState = state.getState();
@@ -9,7 +10,7 @@ export function initPageGame(root) {
     root.goTo("/");
   }
 
-  let mySelection: string = "none";
+  let mySelection: string = "ninguna";
 
   const div = document.createElement("div");
 
@@ -38,14 +39,14 @@ export function initPageGame(root) {
     });
   }
 
-  const opciones = [piedra, papel, tijera];
+  const opciones = [piedra, papel, tijera, ninguna];
 
   let counter = 3;
   const intervalId = setInterval(() => {
     counter--;
     if (counter < 0) {
       clearInterval(intervalId);
-      state.move(mySelection);
+      state.setGame(mySelection);
 
       div.innerHTML = `
     <div class="container">
@@ -53,7 +54,7 @@ export function initPageGame(root) {
         <img 
         class="hand-selected" 
         style="transform: rotate(180deg); height: 200px;" 
-        src=${opciones.find((o) => o.includes(piedra))}>
+        src=${opciones.find((o) => o.includes("ninguna"))}>
       </div>
 
       <div style="height: 100px;"></div>

@@ -15,6 +15,7 @@ export const state = {
     rivalScore: 0,
     userChoise: "none",
     rivalChoise: "none",
+    resultadoParcial: "",
   },
   listeners: [],
   // goTo("/instructions")
@@ -32,7 +33,7 @@ export const state = {
 
   setState(newState) {
     this.data = newState;
-    console.log("State: ", this.data);
+    // console.log("State: ", this.data);
 
     for (const call of this.listeners) {
       call(newState);
@@ -88,7 +89,7 @@ export const state = {
           currentState.roomId = data.id;
           currentState.rtdbRoomId = data.rtdbRoomId;
           this.setState(currentState);
-
+          console.log("Se creó la room");
           // this.init();
           root.goTo("/room-up");
         });
@@ -124,10 +125,10 @@ export const state = {
       for (var key in snap.val()) {
         users.push(key.toString());
       }
-      console.log("RTDB", users);
+      // console.log("RTDB", users);
       if (users.length == 1) {
         if (users[0] == currentState.userName) {
-          console.log("UN PLAYER, VOY A INSTRUCTIONS");
+          // console.log("UN PLAYER, VOY A INSTRUCTIONS");
           root.goTo("/instructions");
         } else if (users[0] != currentState.userName) {
           const myRoomRef = rtdb.ref(
@@ -143,7 +144,7 @@ export const state = {
             chose: currentState.userChoise,
             status: currentState.userStatus,
           });
-          console.log("AGERGUÉ PLAYER, VOY A INSTRUCTIONS");
+          console.log("Se agregó el player");
           root.goTo("/instructions");
         }
       } else if (users.length == 2) {
@@ -160,9 +161,6 @@ export const state = {
 
           state.setState(currentState);
           roomRef.off("value");
-          // PROBLEMÓN
-          console.log("DOS PLAYERS, VOY A INSTRUCTIONS");
-          //
           root.goTo("/instructions");
         } else {
           root.goTo("/sala-llena");
@@ -183,72 +181,75 @@ export const state = {
     });
 
     if (status == "ok") {
-      const rivalRoomRef = rtdb.ref(
-        "/rooms/" +
-          currentState.rtdbRoomId +
-          "/players/" +
-          currentState.rivalName
-      );
-      rivalRoomRef.on("value", (snap) => {
-        const valor = snap.val();
-        var rivalStatus = valor.status;
-        currentState.rivalStatus = rivalStatus;
-        state.setState(currentState);
+      if (currentState.rivalId) {
+        const rivalRoomRef = rtdb.ref(
+          "/rooms/" +
+            currentState.rtdbRoomId +
+            "/players/" +
+            currentState.rivalName
+        );
+        rivalRoomRef.on("value", (snap) => {
+          const valor = snap.val();
+          var rivalStatus = valor.status;
+          currentState.rivalStatus = rivalStatus;
+          state.setState(currentState);
 
-        if (
-          currentState.rivalStatus == "ok" &&
-          currentState.userStatus == "ok"
-        ) {
-          root.goTo("/game");
-        } else if (
-          currentState.rivalStatus == "busy" &&
-          currentState.userStatus == "ok"
-        ) {
-          root.goTo("/waiting-for");
-        }
-      });
-    } else if( status == "busy"){
+          if (
+            currentState.rivalStatus == "ok" &&
+            currentState.userStatus == "ok"
+          ) {
+            root.goTo("/game");
+          } else if (
+            currentState.rivalStatus == "busy" &&
+            currentState.userStatus == "ok"
+          ) {
+            root.goTo("/waiting-for");
+          }
+        });
+      } else {
+        // SI ESTOY LISTA PARA JUGAR PERO NO TENGO OPONENTE
+        console.log("Esperando que se sume un oponente a tu sala");
+        const roomRef = rtdb.ref(
+          "/rooms/" + currentState.rtdbRoomId + "/players"
+        );
+        roomRef.on("value", (snap) => {
+          const valor = snap.val();
+          var users: string[] = [];
+          for (var key in snap.val()) {
+            users.push(key.toString());
+          }
+          if (users.length == 2) {
+            console.log("Se sumó tu oponente")
+            this.setMyStatus(root, status);
+          }
+        });
+      }
+    } else if (status == "busy") {
       root.goTo("/score");
     }
   },
 
-  // listenStatus(root) {
-  //   const currentState = this.getState();
-  //   const rtdbRoomId = currentState.rtdbRoomId;
-  //   const rivalRoomRef = rtdb.ref(
-  //     "/rooms/" + rtdbRoomId + "/players/" + currentState.rivalName
-  //   );
-  //   rivalRoomRef.on("value", (snap) => {
-  //     const valor = snap.val();
-  //     var rivalStatus = valor.status;
-  //     currentState.rivalStatus = rivalStatus;
-  //     state.setState(currentState);
-  //     if (rivalStatus == "ok" && currentState.userStatus == "ok") {
-  //       root.goTo("/game");
-  //     } else if (rivalStatus == "busy" && currentState.userStatus == "ok") {
-  //       root.goTo("/waiting-for");
-  //     }
-  //   });
-  // },
+  setGame(userChoise) {
+    const currentState = this.getState();
+    currentState.userChoise = userChoise;
+    // currentState.rivalChoise = rivalChoise;
+    var myPlay = currentState.userChoise;
+    var pcPlay = currentState.rivalChoise;
 
-  move(myPlay) {},
-  //   const currentState = this.getState();
-  //   currentState.currentGame.myPlay = myPlay;
-  //   currentState.currentGame.pcPlay = pcPlay;
-
-  //   if (
-  //     (myPlay == "piedra" && pcPlay == "tijeras") ||
-  //     (myPlay == "papel" && pcPlay == "piedra") ||
-  //     (myPlay == "tijeras" && pcPlay == "papel")
-  //   ) {
-  //     currentState.historyScore.myPlay++;
-  //     currentState.resultadoParcial = "GANASTE";
-  //   } else if (myPlay == pcPlay) {
-  //     currentState.resultadoParcial = "EMPATE";
-  //   } else {
-  //     currentState.historyScore.pcPlay++;
-  //     currentState.resultadoParcial = "PERDISTE";
-  //   }
-  //   this.setState(currentState);
-  // },
+    if (
+      (myPlay == "piedra" && pcPlay == "tijera") ||
+      (myPlay == "papel" && pcPlay == "piedra") ||
+      (myPlay == "tijera" && pcPlay == "papel") ||
+      (myPlay != "ninguna" && pcPlay == "ninguna")
+    ) {
+      currentState.userScore++;
+      currentState.resultadoParcial = "GANASTE";
+    } else if (myPlay == pcPlay) {
+      currentState.resultadoParcial = "EMPATE";
+    } else {
+      currentState.rivalScore++;
+      currentState.resultadoParcial = "PERDISTE";
+    }
+    this.setState(currentState);
+  },
 };
