@@ -1,10 +1,10 @@
 import { state } from "../../state";
 
-export function initPageInstructions(params) {
+export function initPageInstructions(root) {
   // state.escucharCambios()
   const currentState = state.getState();
   if (currentState.userName == "") {
-    params.goTo("/");
+    root.goTo("/");
   }
 
   const div = document.createElement("div");
@@ -19,7 +19,11 @@ export function initPageInstructions(params) {
 
   const button = div.querySelector(".button") as HTMLElement;
   button.addEventListener("click", () => {
-    state.setMyStatus(params, "ok", "/waiting-for");
+    if (currentState.rivalStatus == "ok") {
+      state.setMyStatus(root, "ok", "/game");
+    } else {
+      state.setMyStatus(root, "ok", "/waiting-for");
+    }
   });
 
   const style = document.createElement("style");

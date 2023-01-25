@@ -17,6 +17,7 @@ export const state = {
     rivalChoise: "none",
   },
   listeners: [],
+// goTo("/instructions")
 
   // init() {
   //   const localState = localStorage.getItem("game-state");
@@ -126,6 +127,7 @@ export const state = {
       console.log("RTDB", users);
       if (users.length == 1) {
         if (users[0] == currentState.userName) {
+          console.log("UN PLAYER, VOY A INSTRUCTIONS")
           root.goTo("/instructions");
         } else if (users[0] != currentState.userName) {
           const myRoomRef = rtdb.ref(
@@ -141,6 +143,7 @@ export const state = {
             chose: currentState.userChoise,
             status: currentState.userStatus,
           });
+          console.log("AGERGUÉ PLAYER, VOY A INSTRUCTIONS")
           root.goTo("/instructions");
         }
       } else if (users.length == 2) {
@@ -156,6 +159,10 @@ export const state = {
           currentState.rivalScore = snap.val()[currentState.rivalName].score;
 
           state.setState(currentState);
+          roomRef.off("value")
+          // PROBLEMÓN
+          console.log("DOS PLAYERS, VOY A INSTRUCTIONS")
+          // 
           root.goTo("/instructions");
         } else {
           root.goTo("/sala-llena");
