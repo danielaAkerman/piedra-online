@@ -38,7 +38,9 @@ export function initPageGame(root) {
       h.classList.add("selected");
     });
   }
-
+  
+  state.setMyGame(mySelection);
+  
   const opciones = [piedra, papel, tijera, ninguna];
 
   let counter = 3;
@@ -46,7 +48,7 @@ export function initPageGame(root) {
     counter--;
     if (counter < 0) {
       clearInterval(intervalId);
-      state.setGame(mySelection);
+      
 
       div.innerHTML = `
     <div class="container">
@@ -54,7 +56,7 @@ export function initPageGame(root) {
         <img 
         class="hand-selected" 
         style="transform: rotate(180deg); height: 200px;" 
-        src=${opciones.find((o) => o.includes("ninguna"))}>
+        src=${opciones.find((o) => o.includes(state.getRivalGame()))}>
       </div>
 
       <div style="height: 100px;"></div>

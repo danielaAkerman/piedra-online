@@ -13,8 +13,8 @@ export const state = {
     rivalStatus: "busy",
     userScore: 0,
     rivalScore: 0,
-    userChoise: "none",
-    rivalChoise: "none",
+    userChoise: "ninguna",
+    rivalChoise: "ninguna",
     resultadoParcial: "",
   },
   listeners: [],
@@ -198,6 +198,7 @@ export const state = {
             currentState.rivalStatus == "ok" &&
             currentState.userStatus == "ok"
           ) {
+            rivalRoomRef.off("value")
             root.goTo("/game");
           } else if (
             currentState.rivalStatus == "busy" &&
@@ -219,7 +220,8 @@ export const state = {
             users.push(key.toString());
           }
           if (users.length == 2) {
-            console.log("Se sumó tu oponente")
+            roomRef.off("value")
+            console.log("Se sumó tu oponente");
             this.setMyStatus(root, status);
           }
         });
@@ -229,27 +231,59 @@ export const state = {
     }
   },
 
-  setGame(userChoise) {
+  setMyGame(userChoise) {
     const currentState = this.getState();
     currentState.userChoise = userChoise;
-    // currentState.rivalChoise = rivalChoise;
+    this.setState(currentState);
+
+    // MANDO MI ELECCION
+    const userGameRef = rtdb.ref(
+      "/rooms/" + currentState.rtdbRoomId + "/players/" + currentState.userName
+    );
+    userGameRef.update({
+      chose: userChoise,
+    });
+
+  },
+
+  getRivalGame() {
+    const currentState = this.getState();
+    // ESCUCHO LA ELECCION DEL RIVAL
+    const rivalGameRef = rtdb.ref(
+      "/rooms/" + currentState.rtdbRoomId + "/players/" + currentState.rivalName
+    );
+    rivalGameRef.once("value", (snap) => {
+      const valor = snap.val();
+      currentState.rivalChoise = valor.chose;
+      state.setState(currentState);
+    });
+return currentState.rivalChoise
+  },
+
+  getWinner() {
+    const currentState = this.getState();
     var myPlay = currentState.userChoise;
-    var pcPlay = currentState.rivalChoise;
+    var rivalPlay = currentState.rivalChoise;
 
     if (
-      (myPlay == "piedra" && pcPlay == "tijera") ||
-      (myPlay == "papel" && pcPlay == "piedra") ||
-      (myPlay == "tijera" && pcPlay == "papel") ||
-      (myPlay != "ninguna" && pcPlay == "ninguna")
+      (myPlay == "piedra" && rivalPlay == "tijera") ||
+      (myPlay == "papel" && rivalPlay == "piedra") ||
+      (myPlay == "tijera" && rivalPlay == "papel") ||
+      (myPlay != "ninguna" && rivalPlay == "ninguna")
     ) {
       currentState.userScore++;
       currentState.resultadoParcial = "GANASTE";
-    } else if (myPlay == pcPlay) {
+    } else if (myPlay == rivalPlay) {
       currentState.resultadoParcial = "EMPATE";
-    } else {
+    } else if (
+      (myPlay == "tijera" && rivalPlay == "piedra") ||
+      (myPlay == "piedra" && rivalPlay == "papel") ||
+      (myPlay == "papel" && rivalPlay == "tijera") ||
+      (myPlay == "ninguna" && rivalPlay != "ninguna")
+    ) {
       currentState.rivalScore++;
       currentState.resultadoParcial = "PERDISTE";
     }
-    this.setState(currentState);
+    state.setState(currentState);
   },
 };
