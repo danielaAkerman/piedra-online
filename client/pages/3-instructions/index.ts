@@ -1,7 +1,6 @@
 import { state } from "../../state";
 
 export function initPageInstructions(root) {
-  // state.escucharCambios()
   const currentState = state.getState();
   if (currentState.userName == "") {
     root.goTo("/");
@@ -19,11 +18,7 @@ export function initPageInstructions(root) {
 
   const button = div.querySelector(".button") as HTMLElement;
   button.addEventListener("click", () => {
-    if (currentState.rivalStatus == "ok") {
-      state.setMyStatus(root, "ok", "/game");
-    } else {
-      state.setMyStatus(root, "ok", "/waiting-for");
-    }
+    state.setMyStatus(root, "ok");
   });
 
   const style = document.createElement("style");

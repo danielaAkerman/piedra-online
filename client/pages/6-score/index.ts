@@ -38,7 +38,12 @@ export function initPageScore(root) {
   div.appendChild(style);
   const button = div.querySelector(".button") as HTMLElement;
   button.addEventListener("click", () => {
-    state.setMyStatus(root, "ok", "/waiting-for");
+    state.setMyStatus(root, "ok");
+    // if (currentState.rivalStatus == "ok") {
+    //   state.setMyStatus(root, "ok", "/game");
+    // } else {
+    //   state.setMyStatus(root, "ok", "/waiting-for");
+    // }
   });
   return div;
 }

@@ -72,7 +72,7 @@ export function initPageGame(root) {
         counterB--;
         if (counterB < 0) {
           clearInterval(intervalIdB);
-          state.setMyStatus(root, "busy", "/score");
+          state.setMyStatus(root, "busy");
         }
       }, 1000);
     }

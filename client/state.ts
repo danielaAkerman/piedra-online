@@ -17,7 +17,7 @@ export const state = {
     rivalChoise: "none",
   },
   listeners: [],
-// goTo("/instructions")
+  // goTo("/instructions")
 
   // init() {
   //   const localState = localStorage.getItem("game-state");
@@ -127,7 +127,7 @@ export const state = {
       console.log("RTDB", users);
       if (users.length == 1) {
         if (users[0] == currentState.userName) {
-          console.log("UN PLAYER, VOY A INSTRUCTIONS")
+          console.log("UN PLAYER, VOY A INSTRUCTIONS");
           root.goTo("/instructions");
         } else if (users[0] != currentState.userName) {
           const myRoomRef = rtdb.ref(
@@ -143,7 +143,7 @@ export const state = {
             chose: currentState.userChoise,
             status: currentState.userStatus,
           });
-          console.log("AGERGUÉ PLAYER, VOY A INSTRUCTIONS")
+          console.log("AGERGUÉ PLAYER, VOY A INSTRUCTIONS");
           root.goTo("/instructions");
         }
       } else if (users.length == 2) {
@@ -159,10 +159,10 @@ export const state = {
           currentState.rivalScore = snap.val()[currentState.rivalName].score;
 
           state.setState(currentState);
-          roomRef.off("value")
+          roomRef.off("value");
           // PROBLEMÓN
-          console.log("DOS PLAYERS, VOY A INSTRUCTIONS")
-          // 
+          console.log("DOS PLAYERS, VOY A INSTRUCTIONS");
+          //
           root.goTo("/instructions");
         } else {
           root.goTo("/sala-llena");
@@ -171,48 +171,65 @@ export const state = {
     });
   },
 
-  setMyStatus(root, status: string, route: string) {
+  setMyStatus(root, status: string) {
     const currentState = this.getState();
     currentState.userStatus = status;
     state.setState(currentState);
-
     const myUserRef = rtdb.ref(
       "/rooms/" + currentState.rtdbRoomId + "/players/" + currentState.userName
     );
     myUserRef.update({
       status,
     });
-    root.goTo(route);
+
+    if (status == "ok") {
+      const rivalRoomRef = rtdb.ref(
+        "/rooms/" +
+          currentState.rtdbRoomId +
+          "/players/" +
+          currentState.rivalName
+      );
+      rivalRoomRef.on("value", (snap) => {
+        const valor = snap.val();
+        var rivalStatus = valor.status;
+        currentState.rivalStatus = rivalStatus;
+        state.setState(currentState);
+
+        if (
+          currentState.rivalStatus == "ok" &&
+          currentState.userStatus == "ok"
+        ) {
+          root.goTo("/game");
+        } else if (
+          currentState.rivalStatus == "busy" &&
+          currentState.userStatus == "ok"
+        ) {
+          root.goTo("/waiting-for");
+        }
+      });
+    } else if( status == "busy"){
+      root.goTo("/score");
+    }
   },
 
-  // escucharCambioRival(root) {
+  // listenStatus(root) {
   //   const currentState = this.getState();
   //   const rtdbRoomId = currentState.rtdbRoomId;
-  //   const roomRef = rtdb.ref("/rooms/" + rtdbRoomId + "/players");
-  //   roomRef.on("value", (snap) => {
+  //   const rivalRoomRef = rtdb.ref(
+  //     "/rooms/" + rtdbRoomId + "/players/" + currentState.rivalName
+  //   );
+  //   rivalRoomRef.on("value", (snap) => {
   //     const valor = snap.val();
-  //     currentState.rivalStatus = valor[currentState.rivalName].status;
-  //     if (currentState.rivalStatus == "ok") {
+  //     var rivalStatus = valor.status;
+  //     currentState.rivalStatus = rivalStatus;
+  //     state.setState(currentState);
+  //     if (rivalStatus == "ok" && currentState.userStatus == "ok") {
   //       root.goTo("/game");
+  //     } else if (rivalStatus == "busy" && currentState.userStatus == "ok") {
+  //       root.goTo("/waiting-for");
   //     }
   //   });
   // },
-
-  listenStatus(root) {
-    const currentState = this.getState();
-    if (currentState.rivalStatus == "ok") {
-      root.goTo("/game");
-    }
-    const rtdbRoomId = currentState.rtdbRoomId;
-    const roomRef = rtdb.ref("/rooms/" + rtdbRoomId + "/players");
-    roomRef.on("value", (snap) => {
-      const valor = snap.val();
-      var rivalStatus = valor[currentState.rivalName].status;
-      if (rivalStatus == "ok") {
-        root.goTo("/game");
-      }
-    });
-  },
 
   move(myPlay) {},
   //   const currentState = this.getState();
